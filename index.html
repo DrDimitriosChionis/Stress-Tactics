@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRESS TACTICS | Dr. Chionis Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Roboto+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #080808;
+            --neon-red: #ff003c;
+            --neon-blue: #04d9ff;
+            --neon-gold: #ffd700;
+            --text-main: #e0e0e0;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-void);
+            color: var(--text-main);
+            font-family: 'VT323', monospace;
+            height: 100vh;
+            overflow: hidden; /* No scrolling for app-like feel */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- BACKGROUND FX --- */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            pointer-events: none; z-index: 5; opacity: 0.7;
+        }
+
+        /* --- HEADER & ID CARD --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; border-bottom: 2px solid #333;
+            background: rgba(0,0,0,0.9); z-index: 20;
+        }
+
+        h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3rem; margin: 0; color: var(--neon-red);
+            text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            letter-spacing: 2px;
+        }
+
+        /* Digital ID Card Style */
+        .id-card {
+            display: flex; align-items: center; gap: 15px;
+            border: 1px solid var(--neon-blue); padding: 5px 20px;
+            border-radius: 8px; background: rgba(4, 217, 255, 0.05);
+            box-shadow: 0 0 15px rgba(4, 217, 255, 0.1);
+        }
+
+        .id-photo {
+            width: 50px; height: 50px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--neon-blue);
+            filter: grayscale(100%) contrast(120%); /* Sci-fi look */
+        }
+
+        .id-info { display: flex; flex-direction: column; line-height: 1.1; }
+        .id-role { font-family: 'Roboto Mono'; font-size: 0.7rem; color: var(--neon-blue); letter-spacing: 1px; }
+        .id-name { font-family: 'VT323'; font-size: 1.4rem; color: white; font-weight: bold; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex; gap: 2px; background: #151515; z-index: 20;
+        }
+
+        .nav-btn {
+            flex: 1; border: none; background: #111; color: #666;
+            padding: 15px; font-family: 'VT323', monospace; font-size: 1.5rem;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-btn:hover { background: #222; color: #fff; }
+        .nav-btn.active { background: var(--bg-void); color: white; }
+        
+        /* Specific Tab Colors */
+        .nav-btn.active[data-target="reflex"] { border-bottom-color: var(--neon-red); color: var(--neon-red); text-shadow: 0 0 8px var(--neon-red); }
+        .nav-btn.active[data-target="tactical"] { border-bottom-color: var(--neon-blue); color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
+        .nav-btn.active[data-target="sim"] { border-bottom-color: white; color: white; text-shadow: 0 0 8px white; }
+        .nav-btn.active[data-target="archive"] { border-bottom-color: var(--neon-gold); color: var(--neon-gold); text-shadow: 0 0 8px var(--neon-gold); }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1; padding: 40px;
+            display: flex; justify-content: center; align-items: flex-start;
+            overflow-y: auto; z-index: 10;
+        }
+
+        .screen { display: none; width: 100%; max-width: 900px; animation: fadeIn 0.4s ease-out; }
+        .screen.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- COMPONENTS --- */
+        h2 { font-size: 2rem; border-bottom: 1px solid #444; margin-top: 0; padding-bottom: 10px; }
+        p.desc { font-size: 1.3rem; margin-bottom: 20px; font-family: 'Roboto Mono'; }
+
+        /* Reflex Mode */
+        .timer-bg { width: 100%; height: 25px; background: #222; border: 1px solid #555; margin: 20px 0; }
+        .timer-fill { width: 100%; height: 100%; background: var(--neon-red); box-shadow: 0 0 20px var(--neon-red); transition: width 0.1s linear; }
+        
+        textarea {
+            width: 100%; height: 150px; background: #111; border: 2px solid #444;
+            color: white; font-family: 'VT323'; font-size: 1.6rem; padding: 15px;
+            box-sizing: border-box; resize: none; outline: none;
+        }
+        textarea:focus { border-color: white; }
+
+        /* Tactical Mode */
+        .checklist { border: 1px solid var(--neon-blue); background: rgba(4, 217, 255, 0.05); padding: 20px; margin-bottom: 20px; }
+        .check-item { display: flex; align-items: center; gap: 15px; font-size: 1.5rem; margin-bottom: 10px; cursor: pointer; color: var(--neon-blue); }
+        .check-item input { width: 25px; height: 25px; accent-color: var(--neon-blue); cursor: pointer; }
+
+        /* Simulation Mode */
+        .terminal {
+            background: black; border: 2px solid white; padding: 30px;
+            box-shadow: 0 0 40px rgba(255,255,255,0.1); min-height: 400px;
+            display: flex; flex-direction: column;
+        }
+        .type-area { font-family: 'Roboto Mono', monospace; font-size: 1.6rem; line-height: 1.5; white-space: pre-wrap; flex: 1; }
+        .cursor::after { content: '█'; animation: blink 1s infinite; color: var(--neon-blue); }
+        
+        .poll-area { margin-top: 20px; border-top: 2px solid #333; padding-top: 20px; display: none; flex-direction: column; gap: 15px; }
+        .poll-btn {
+            background: transparent; border: 2px solid #555; color: #aaa;
+            padding: 15px; text-align: left; font-family: 'Roboto Mono'; font-size: 1.3rem;
+            cursor: pointer; transition: 0.2s;
+        }
+        .poll-btn:hover { border-color: var(--neon-blue); color: white; background: #111; }
+        .poll-key { font-weight: bold; color: var(--neon-blue); margin-right: 15px; }
+
+        /* Archive Mode */
+        .archive-box { border: 2px solid var(--neon-gold); padding: 40px; text-align: center; }
+        .input-gold { width: 100%; padding: 15px; background: #111; border: 1px solid var(--neon-gold); color: var(--neon-gold); font-family: 'VT323'; font-size: 1.5rem; text-align: center; margin-top: 20px; }
+        .btn-gold { background: var(--neon-gold); color: black; border: none; padding: 15px 40px; font-size: 1.5rem; font-weight: bold; margin-top: 15px; cursor: pointer; }
+
+        /* Audio Toggle */
+        #audio-toggle {
+            position: fixed; bottom: 20px; right: 20px; z-index: 100;
+            background: black; color: #666; border: 1px solid #666; padding: 10px 20px;
+            font-family: 'VT323'; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+        }
+        #audio-toggle.on { border-color: var(--neon-red); color: var(--neon-red); box-shadow: 0 0 10px var(--neon-red); }
+
+        .feedback { margin-top: 15px; padding: 15px; font-size: 1.4rem; display: none; border: 1px dashed; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+
+    <header>
+        <h1>STRESS TACTICS</h1>
+        
+        <div class="id-card">
+            <img src="kariera2025-205" alt="User" class="id-photo">
+            <div class="id-info">
+                <span class="id-role">HEAD OPERATOR</span>
+                <span class="id-name">DR. D. CHIONIS</span>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" data-target="reflex" onclick="setTab('reflex')">I. THREAT</button>
+        <button class="nav-btn" data-target="tactical" onclick="setTab('tactical')">II. LOGIC</button>
+        <button class="nav-btn" data-target="sim" onclick="setTab('sim')">III. SIMULATION</button>
+        <button class="nav-btn" data-target="archive" onclick="setTab('archive')">IV. ARCHIVE</button>
+    </nav>
+
+    <main>
+        <div id="reflex" class="screen active">
+            <h2 style="color:var(--neon-red)">// SYSTEM 1: REFLEX OVERLOAD</h2>
+            <p class="desc">STATUS: <span style="color:var(--neon-red)">CRITICAL THREAT DETECTED</span></p>
+            
+            <div style="background:#222; padding:20px; border-left:4px solid var(--neon-red); font-style:italic; font-size:1.4rem; font-family:'Roboto Mono'; color:white; margin-bottom:20px;">
+                INCOMING CHAT (ALL STAFF):<br>
+                "Επειδή ο Δημήτριος πάλι ξέχασε να στείλει τα αρχεία, θα χρειαστεί να δουλέψουμε όλοι το Σαββατοκύριακο."
+            </div>
+            
+            <div class="timer-bg"><div id="timerBar" class="timer-fill"></div></div>
+            
+            <textarea id="reflexInput" placeholder="> TYPE RESPONSE IMMEDIATELY..." onkeydown="playTypeSound()"></textarea>
+            <div id="reflexFb" class="feedback" style="color:var(--neon-red); border-color:var(--neon-red);">
+                > TIME EXPIRED. AMYGDALA HIJACK CONFIRMED.
+            </div>
+        </div>
+
+        <div id="tactical" class="screen">
+            <h2 style="color:var(--neon-blue)">// SYSTEM 2: COGNITIVE PROTOCOL</h2>
+            <p class="desc">STATUS: <span style="color:var(--neon-blue)">ENGAGING FILTERS...</span></p>
+            
+            <div class="checklist">
+                <div class="check-item"><input type="checkbox" onchange="checkTactical()"> 01. DETACH EMOTION (Not Personal)</div>
+                <div class="check-item"><input type="checkbox" onchange="checkTactical()"> 02. VERIFY FACTS (Check Sent Items)</div>
+                <div class="check-item"><input type="checkbox" onchange="checkTactical()"> 03. DEFINE OBJECTIVE (Solve, don't Fight)</div>
+            </div>
+
+            <textarea id="tacticalInput" disabled placeholder="> INPUT LOCKED. COMPLETE CHECKLIST FIRST."></textarea>
+            <div id="tacticalFb" class="feedback" style="color:var(--neon-blue); border-color:var(--neon-blue); display:none;">
+                > PROTOCOL VERIFIED. SIGNAL NOISE REDUCED.
+            </div>
+        </div>
+
+        <div id="sim" class="screen">
+            <h2 style="color:white">// SIMULATION: OMNIBANK CRISIS</h2>
+            <div class="terminal">
+                <div id="typeArea" class="type-area"></div>
+                
+                <div id="pollArea" class="poll-area">
+                    <div style="color:var(--neon-blue); font-size:1.3rem;">> AWAITING COMMAND (TYPE A, B OR C IN CHAT):</div>
+                    <button id="btnA" class="poll-btn" onclick="simChoice('A')"></button>
+                    <button id="btnB" class="poll-btn" onclick="simChoice('B')"></button>
+                    <button id="btnC" class="poll-btn" onclick="simChoice('C')"></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="archive" class="screen">
+            <div class="archive-box">
+                <h2 style="color:var(--neon-gold); border:none;">// CLASSIFIED TOOLKIT</h2>
+                <p class="desc">SECURE DOWNLOAD: CHEAT SHEET & SLIDES</p>
+                
+                <ul style="text-align:left; font-size:1.3rem; color:#aaa; width:60%; margin: 30px auto;">
+                    <li>[FILE] Protocol_Alpha.pdf (One-Page Guide)</li>
+                    <li>[FILE] Workshop_Deck.pptx</li>
+                    <li>[FILE] Power_Words_List.txt</li>
+                </ul>
+
+                <input type="email" id="emailInput" class="input-gold" placeholder="ENTER SECURE EMAIL">
+                <button onclick="submitLead()" class="btn-gold">UNLOCK ASSETS</button>
+                
+                <div id="leadFb" class="feedback" style="color:var(--neon-gold); border-color:var(--neon-gold);">
+                    > ACCESS GRANTED. ASSETS SENT TO INBOX.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <button id="audio-toggle" onclick="toggleAudio()">🔊 AUDIO: OFF</button>
+
+<script>
+    // --- AUDIO ENGINE ---
+    let audioCtx;
+    let isAudioOn = false;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTone(freq, type, dur) {
+        if (!isAudioOn) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + dur);
+    }
+
+    function toggleAudio() {
+        initAudio();
+        isAudioOn = !isAudioOn;
+        const btn = document.getElementById('audio-toggle');
+        btn.innerText = isAudioOn ? "🔊 AUDIO: ON" : "🔊 AUDIO: OFF";
+        btn.classList.toggle('on');
+        if (isAudioOn) playTone(110, 'sawtooth', 0.5); // Start sound
+    }
+
+    function playTypeSound() { if (Math.random() > 0.7) playTone(800, 'square', 0.05); }
+
+    // --- NAVIGATION ---
+    function setTab(id) {
+        document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        document.querySelector(`.nav-btn[data-target="${id}"]`).classList.add('active');
+
+        // Sounds & Init Logic
+        if(id === 'reflex') { playTone(100, 'sawtooth', 0.5); startReflex(); }
+        if(id === 'tactical') playTone(440, 'sine', 0.5);
+        if(id === 'sim') { playTone(220, 'square', 0.5); if(!simStarted) startSim('start'); }
+        if(id === 'archive') playTone(880, 'sine', 0.4);
+    }
+
+    // --- REFLEX LOGIC ---
+    let reflexInterval;
+    function startReflex() {
+        clearInterval(reflexInterval);
+        const bar = document.getElementById('timerBar');
+        const input = document.getElementById('reflexInput');
+        const fb = document.getElementById('reflexFb');
+        
+        input.value = ""; input.disabled = false; fb.style.display = 'none';
+        let width = 100;
+
+        reflexInterval = setInterval(() => {
+            width -= 0.5; // Speed
+            bar.style.width = width + '%';
+            if (width <= 0) {
+                clearInterval(reflexInterval);
+                input.disabled = true;
+                fb.style.display = 'block';
+                playTone(60, 'sawtooth', 1.0); // Fail sound
+            }
+        }, 50);
+    }
+
+    // --- TACTICAL LOGIC ---
+    function checkTactical() {
+        playTone(600, 'sine', 0.1); // Click sound
+        const all = Array.from(document.querySelectorAll('.checklist input')).every(i => i.checked);
+        if (all) {
+            const input = document.getElementById('tacticalInput');
+            input.disabled = false;
+            input.placeholder = "> SYSTEM UNLOCKED. ENTER LOGICAL RESPONSE.";
+            playTone(1000, 'sine', 0.5); // Success sound
+        }
+    }
+
+    // --- SIMULATION LOGIC ---
+    const story = {
+        start: {
+            text: "ΔΕΥΤΕΡΑ 08:57 | HQ\n\nΤο τηλέφωνο χτυπάει. Είναι ο CTO της OmniBank.\n\n\"Δρ. Χιώνη, το update κράσαρε το trading platform. Το Χρηματιστήριο ανοίγει σε 3 λεπτά. Αν δεν παίξει, χάνουμε εκατομμύρια και τη σύμβαση.\"\n\nΗ ομάδα IT σε κοιτάζει παγωμένη.",
+            choices: [
+                {k:'A', t:'FIGHT: Ρίξε την ευθύνη στο Hardware', n:'blame'},
+                {k:'B', t:'FREEZE: Ζήτα 30 λεπτά για διάγνωση', n:'delay'},
+                {k:'C', t:'FLOW: Εντολή για Rollback ΤΩΡΑ', n:'rollback'}
+            ]
+        },
+        blame: { text: "ΕΠΙΛΟΓΗ A: FIGHT\n\nΚατηγορείς το hardware τους. Ο CTO ουρλιάζει: \"Τολμάς να κατηγορείς εμάς; Καλώ τους δικηγόρους!\"\n\nΤο Χρηματιστήριο ανοίγει. Η πλατφόρμα είναι κάτω.\n\n> GAME OVER: Απώλεια Πελάτη.", choices: [] },
+        delay: { text: "ΕΠΙΛΟΓΗ B: FREEZE\n\nΖητάς χρόνο. \"Δεν έχουμε χρόνο!\" φωνάζει και κλείνει.\nΗ ομάδα μένει χωρίς εντολές. Τα 3 λεπτά περνούν.\n\n> GAME OVER: Παράλυση Λήψης Αποφάσεων.", choices: [] },
+        rollback: { text: "ΕΠΙΛΟΓΗ C: FLOW\n\nΑγνοείς τον τόνο του. Δίνεις εντολή: \"Rollback στο v4.5 ΤΩΡΑ.\"\n\n08:59. Το σύστημα επανέρχεται.\n09:00. Το trading ξεκινά ομαλά.\n\n> MISSION SUCCESS: Ψυχραιμία υπό πίεση.", choices: [] }
+    };
+
+    let simStarted = false;
+    let currentData = {};
+
+    function startSim(key) {
+        simStarted = true;
+        currentData = story[key];
+        const area = document.getElementById('typeArea');
+        document.getElementById('pollArea').style.display = 'none';
+        
+        // Typewriter Effect
+        let i = 0;
+        area.innerHTML = "<span class='cursor'></span>";
+        
+        function type() {
+            if (i < currentData.text.length) {
+                area.innerHTML = currentData.text.substring(0, i+1) + "<span class='cursor'></span>";
+                i++;
+                setTimeout(type, 30);
+            } else {
+                if(currentData.choices.length > 0) showPolls();
+            }
+        }
+        type();
+    }
+
+    function showPolls() {
+        playTone(400, 'square', 0.4); // Alert sound
+        const area = document.getElementById('pollArea');
+        area.style.display = 'flex';
+        document.getElementById('btnA').innerHTML = `<span class='poll-key'>A</span> ${currentData.choices[0].t}`;
+        document.getElementById('btnB').innerHTML = `<span class='poll-key'>B</span> ${currentData.choices[1].t}`;
+        document.getElementById('btnC').innerHTML = `<span class='poll-key'>C</span> ${currentData.choices[2].t}`;
+    }
+
+    function simChoice(k) {
+        const next = currentData.choices.find(c => c.k === k).n;
+        startSim(next);
+    }
+
+    // --- ARCHIVE LOGIC ---
+    function submitLead() {
+        const email = document.getElementById('emailInput').value;
+        if(email.includes('@')) {
+            document.getElementById('leadFb').style.display = 'block';
+            document.getElementById('emailInput').style.display = 'none';
+            playTone(1200, 'sine', 0.5); // Win sound
+        } else {
+            alert("ERROR: INVALID EMAIL");
+        }
+    }
+</script>
+
+</body>
+</html>
