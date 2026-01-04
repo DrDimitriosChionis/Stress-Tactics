@@ -55,7 +55,6 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 40px; border-bottom: 2px solid #333; background: rgba(0,0,0,0.9); z-index: 20;
         }
-        /* Εφαρμογή Stranger Things Font και στο Header */
         h1 { font-family: 'Creepster', cursive; font-size: 3rem; margin: 0; color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); letter-spacing: 2px; }
         
         .id-card { display: flex; align-items: center; gap: 15px; border: 1px solid var(--neon-blue); padding: 5px 20px; border-radius: 8px; }
@@ -111,13 +110,18 @@
 
         /* --- SIMULATION MODE --- */
         .sim-card { border: 1px solid #fff; padding: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05); }
+        .sim-options-container { display: flex; flex-direction: column; gap: 8px; }
         .sim-btn {
-            width: 100%; padding: 15px; margin-top: 10px; background: transparent; 
-            border: 1px solid #555; color: #ccc; cursor: pointer; text-align: left; font-family: 'Roboto Mono'; font-size: 1.1rem;
+            width: 100%; padding: 8px 15px; background: transparent; 
+            border: 1px solid #555; color: #ccc; cursor: pointer; text-align: left; font-family: 'Roboto Mono'; font-size: 0.95rem;
+            transition: 0.2s;
         }
-        .sim-btn:hover { border-color: white; color: white; }
+        .sim-btn:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); }
+        
         .sim-timer-bar { width: 100%; height: 5px; background: #333; margin-bottom: 15px; }
         .sim-timer-fill { width: 100%; height: 100%; background: white; transition: width 1s linear; }
+        
+        #simFeedback { display: none; border: 2px solid var(--neon-red); padding: 20px; background: #111; margin-top: 20px; animation: glitch 0.3s; }
 
         /* --- ARCHIVE MODE --- */
         .archive-box { border: 2px solid var(--neon-gold); padding: 40px; text-align: center; }
@@ -254,20 +258,24 @@
                 <div class="sim-timer-bar"><div id="simTimerFill" class="sim-timer-fill"></div></div>
                 
                 <div id="simCard" class="sim-card">
-                    <div id="simText" style="font-size:1.3rem; margin-bottom:20px; font-weight:bold; color:white;">ΦΟΡΤΩΣΗ ΣΕΝΑΡΙΟΥ...</div>
-                    <button class="sim-btn" onclick="checkSim(0)">ΕΠΙΛΟΓΗ Α</button>
-                    <button class="sim-btn" onclick="checkSim(1)">ΕΠΙΛΟΓΗ Β</button>
-                    <button class="sim-btn" onclick="checkSim(2)">ΕΠΙΛΟΓΗ Γ</button>
+                    <div id="simText" style="font-size:1.3rem; margin-bottom:20px; font-weight:bold; color:white; font-family:'Roboto Mono';">
+                        ΦΟΡΤΩΣΗ ΣΕΝΑΡΙΟΥ...
+                    </div>
+                    <div id="simOptions" class="sim-options-container">
+                        </div>
                 </div>
                 
-                <div id="simFeedback" style="display:none; border:2px solid var(--neon-red); padding:20px; background:#111;">
-                    <h3 style="color:var(--neon-red); margin-top:0;">ΣΦΑΛΜΑ ΛΟΓΙΚΗΣ</h3>
-                    <p id="simReason" style="font-size:1.2rem;"></p>
-                    <button class="sim-btn" style="border-color:var(--neon-red); color:var(--neon-red);" onclick="resetSimQuestion()">ΕΠΑΝΑΦΟΡΑ ΕΡΩΤΗΣΗΣ</button>
+                <div id="simFeedback">
+                    <h3 style="color:var(--neon-red); margin-top:0; font-family:'VT323'; font-size:1.8rem;">ΣΦΑΛΜΑ ΛΟΓΙΚΗΣ</h3>
+                    <p id="simReason" style="font-size:1.2rem; font-family:'Roboto Mono'; color:#ccc;"></p>
+                    <button class="sim-btn" style="border-color:var(--neon-red); color:var(--neon-red); text-align:center; margin-top:15px;" onclick="resetSimQuestion()">
+                        ΕΠΑΝΑΦΟΡΑ ΕΡΩΤΗΣΗΣ
+                    </button>
                 </div>
 
-                <div id="simEnd" style="display:none; text-align:center; color:var(--neon-gold); font-size:1.5rem;">
-                    Η ΠΡΟΣΟΜΟΙΩΣΗ ΟΛΟΚΛΗΡΩΘΗΚΕ.<br>ΑΝΑΛΥΣΗ ΑΝΤΟΧΗΣ: ΕΠΙΤΥΧΗΣ.
+                <div id="simEnd" style="display:none; text-align:center; color:var(--neon-gold); font-size:1.5rem; margin-top:50px;">
+                    Η ΠΡΟΣΟΜΟΙΩΣΗ ΟΛΟΚΛΗΡΩΘΗΚΕ.<br>ΑΝΑΛΥΣΗ ΑΝΤΟΧΗΣ: ΕΠΙΤΥΧΗΣ.<br>
+                    <span style="font-size:1rem; color:#666;">Μεταβείτε στο Tab IV.</span>
                 </div>
             </div>
 
@@ -316,7 +324,7 @@
     function enterSystem() {
         document.getElementById('intro-screen').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
-        // Auto-play music on click (Browser policy requires interaction)
+        // Auto-play music on click
         bgMusic.play().catch(e => console.log("Audio requires interaction"));
     }
 
@@ -349,7 +357,6 @@
         document.getElementById('reflexOptions').style.opacity = '1';
         document.querySelectorAll('.popup-msg').forEach(e => e.remove());
         
-        // Reset Logic
         threatLevel = 1;
         document.getElementById('threat-message').innerHTML = threats[0];
         fb.style.display = 'none';
@@ -378,14 +385,10 @@
             const msgBox = document.getElementById('threat-message');
             msgBox.innerHTML = threats[threatLevel - 1];
             msgBox.style.animation = 'none';
-            msgBox.offsetHeight; /* trigger reflow */
+            msgBox.offsetHeight; 
             msgBox.style.animation = 'glitch 0.3s';
-            
-            // Speed up timer slightly for pressure
-            const bar = document.getElementById('timerBar');
-            bar.style.width = '100%';
+            document.getElementById('timerBar').style.width = '100%';
         } else {
-            // Level 3 reaction triggers crash
             triggerOverload();
             clearInterval(reflexTimer);
             document.getElementById('reflexFb').style.display = 'block';
@@ -393,7 +396,7 @@
     }
 
     function triggerOverload() {
-        const msgs = ["ΚΡΙΣΙΜΟ ΣΦΑΛΜΑ", "ΠΙΕΣΗ 100%", "ΑΠΟΤΥΧΙΑ", "ΠΑΝΙΚΟΣ"];
+        const msgs = ["ΚΡΙΣΙΜΟ ΣΦΑΛΜΑ", "ΠΙΕΣΗ 100%", "ΑΠΟΤΥΧΙΑ", "ΠΑΝΙΚΟΣ", "ERROR 404"];
         const container = document.getElementById('reflex');
         let count = 0;
         const interval = setInterval(() => {
@@ -420,8 +423,7 @@
         const key = `${s1}-${s2}-${s3}`;
         
         if (key === 'detached-verify-solve') {
-             fb.style.color = 'var(--neon-blue)';
-             fb.style.borderColor = 'var(--neon-blue)';
+             fb.style.color = 'var(--neon-blue)'; fb.style.borderColor = 'var(--neon-blue)';
              fb.innerHTML = "> ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ.<br>Σωστό Πρωτόκολλο: Αποστασιοποίηση, Γεγονότα, Λύση.";
         } else if (s1 === 'angry') {
              fb.style.color = 'var(--neon-red)'; fb.style.borderColor = 'var(--neon-red)';
@@ -445,18 +447,84 @@
         document.getElementById('logicFb').style.display = 'none';
     }
 
-    // --- 3. SIMULATION LOGIC ---
+    // --- 3. SIMULATION LOGIC (7 OPTIONS) ---
     const scenarios = [
-        { q: "ΣΤΑΔΙΟ 1: Ένα ορθογραφικό λάθος σε email προς όλη την ομάδα.", ops: ["Πανικός & 2ο email", "Αγνόηση", "Ήρεμη διόρθωση"], correct: 2, why: "Ο πανικός μεγεθύνει το πρόβλημα. Η αγνόηση δείχνει αδιαφορία." },
-        { q: "ΣΤΑΔΙΟ 2: Παθητικά επιθετικό σχόλιο από συνάδελφο.", ops: ["Καβγάς", "Κουτσομπολιό", "Διευκρίνιση πρόθεσης"], correct: 2, why: "Ο καβγάς και το κουτσομπολιό δεν λύνουν το θέμα, απλά το ανακυκλώνουν." },
-        { q: "ΣΤΑΔΙΟ 3: Ο πελάτης αλλάζει την προθεσμία για αύριο.", ops: ["Άρνηση", "Υπερωρίες σιωπηλά", "Διαπραγμάτευση εύρους"], correct: 2, why: "Η σιωπηλή θυσία οδηγεί σε burnout. Η διαπραγμάτευση είναι επαγγελματισμός." },
-        { q: "ΣΤΑΔΙΟ 4: Διακοπή ίντερνετ κατά τη διάρκεια παρουσίασης.", ops: ["Ουρλιαχτά", "Πάγωμα", "Hotspot & Επανασύνδεση"], correct: 2, why: "Τα τεχνικά προβλήματα λύνονται με τεχνικές λύσεις, όχι με φωνές." },
-        { q: "ΣΤΑΔΙΟ 5: Αρνητικό feedback δημόσια.", ops: ["Άμυνα", "Κατάρρευση", "Ερώτηση για λεπτομέρειες"], correct: 2, why: "Η άμυνα δείχνει ανασφάλεια. Οι ερωτήσεις δείχνουν επιθυμία για βελτίωση." },
-        { q: "ΣΤΑΔΙΟ 6: Φήμη για απολύσεις στο γραφείο.", ops: ["Διάδοση φήμης", "Πανικός", "Έλεγχος πηγής"], correct: 2, why: "Η διασπορά φημών αυξάνει το συλλογικό άγχος χωρίς λόγο." },
-        { q: "ΣΤΑΔΙΟ 7: Καθυστέρηση μισθοδοσίας 3 μέρες.", ops: ["Απειλές", "Δανεικά", "Επίσημη ερώτηση"], correct: 2, why: "Οι απειλές καταστρέφουν γέφυρες. Η επίσημη οδός είναι η μόνη ασφαλής." },
-        { q: "ΣΤΑΔΙΟ 8: Χάθηκε σημαντικό αρχείο (Unsaved).", ops: ["Σπάσιμο πληκτρολογίου", "Κλάμα", "IT recovery"], correct: 2, why: "Το ξέσπασμα κοστίζει εξοπλισμό. Το IT μπορεί να έχει backup." },
-        { q: "ΣΤΑΔΙΟ 9: Ύποπτο email ασφαλείας.", ops: ["Αγνόηση", "Κλικ στο link", "Αναφορά Security"], correct: 2, why: "Το κλικ είναι μοιραίο. Η αναφορά προστατεύει την εταιρεία." },
-        { q: "ΣΤΑΔΙΟ 10: ΟΛΙΚΗ ΕΞΟΥΘΕΝΩΣΗ (BURNOUT).", ops: ["Παραίτηση τώρα", "Ψεύτικη ασθένεια", "Αναζήτηση βοήθειας"], correct: 2, why: "Η παρορμητική παραίτηση δημιουργεί οικονομικό πρόβλημα. Η βοήθεια είναι δύναμη." }
+        { 
+            q: "ΣΤΑΔΙΟ 1: Ορθογραφικό λάθος σε σημαντικό email.", 
+            ops: [
+                "Πανικός και αποστολή 2ου email 'ΑΚΥΡΟ'", 
+                "Αγνόηση και ελπίδα να μην το δουν", 
+                "Ήρεμη, σύντομη διόρθωση", 
+                "Ρίχνω το φταίξιμο στο πληκτρολόγιο", 
+                "Κλείνω το PC και φεύγω", 
+                "Γελάω στο chat (Μηχανισμός Άμυνας)", 
+                "Ζητάω από το IT να διαγράψει τον server"
+            ], 
+            correct: 2, 
+            why: "Η ήρεμη διόρθωση δείχνει έλεγχο. Ο πανικός ή οι δικαιολογίες δείχνουν ανασφάλεια." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 2: Παθητικά επιθετικό σχόλιο από συνάδελφο.", 
+            ops: [
+                "Επίθεση μπροστά σε όλους", 
+                "Κουτσομπολιό σε τρίτους", 
+                "Ιδιωτική διευκρίνιση πρόθεσης", 
+                "Ειρωνική απάντηση", 
+                "Σιωπηλός θυμός (Freeze)", 
+                "Κλάμα στην τουαλέτα", 
+                "Αναφορά στο HR χωρίς προειδοποίηση"
+            ], 
+            correct: 2, 
+            why: "Η απευθείας επικοινωνία σπάει τον κύκλο της τοξικότητας." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 3: Αλλαγή deadline τελευταία στιγμή.", 
+            ops: ["Άρνηση", "Υπερωρίες και γκρίνια", "Διαπραγμάτευση εύρους", "Παραίτηση", "Ψέματα ότι αρρώστησα", "Αγνόηση του πελάτη", "Πανικός"], 
+            correct: 2, 
+            why: "Η διαπραγμάτευση είναι το κλειδί του επαγγελματισμού." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 4: Πτώση Internet σε παρουσίαση.", 
+            ops: ["Βρισιές", "Πάγωμα", "Hotspot από κινητό", "Κατηγορώ τον provider", "Ακύρωση meeting", "Αστείο για την τεχνολογία", "Χτύπημα στο router"], 
+            correct: 2, 
+            why: "Τεχνικά προβλήματα λύνονται με τεχνικές λύσεις." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 5: Αρνητικό Feedback δημόσια.", 
+            ops: ["Αμυντική στάση", "Κατάρρευση", "Ερώτηση για λεπτομέρειες", "Αντεπίθεση", "Ειρωνικό χαμόγελο", "Σιωπή", "Αποχώρηση από το δωμάτιο"], 
+            correct: 2, 
+            why: "Οι ερωτήσεις μετατρέπουν την κριτική σε δεδομένα." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 6: Φήμες για απολύσεις.", 
+            ops: ["Διασπορά φήμης", "Πανικός", "Έλεγχος πηγής", "Ενημέρωση βιογραφικού", "Ερώτηση σε όλους", "Αδιαφορία", "Κλάμα"], 
+            correct: 2, 
+            why: "Η επαλήθευση της πηγής σταματά τον θόρυβο." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 7: Καθυστέρηση μισθοδοσίας.", 
+            ops: ["Απειλές", "Δανεικά", "Επίσημη ερώτηση στο λογιστήριο", "Στάση εργασίας", "Κουτσομπολιό", "Θυμός στο σπίτι", "Αίτηση δανείου"], 
+            correct: 2, 
+            why: "Η επίσημη οδός είναι η μόνη ασφαλής." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 8: Χάθηκε αρχείο (Unsaved).", 
+            ops: ["Σπάσιμο πληκτρολογίου", "Κλάμα", "IT Recovery / Backup check", "Βρισιές", "Παραίτηση", "Νέο αρχείο από την αρχή με νεύρα", "Πίνω αλκοόλ"], 
+            correct: 2, 
+            why: "Το IT μπορεί συχνά να ανακτήσει αρχεία. Ο θυμός όχι." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 9: Phishing Email.", 
+            ops: ["Κλικ στο Link", "Απάντηση με βρισιές", "Report στο Security", "Διαγραφή", "Προώθηση σε φίλο", "Αγνόηση", "Πανικός ότι χακαρίστηκα"], 
+            correct: 2, 
+            why: "Η αναφορά προστατεύει όλη την εταιρεία." 
+        },
+        { 
+            q: "ΣΤΑΔΙΟ 10: BURNOUT.", 
+            ops: ["Παραίτηση τώρα", "Ψεύτικη ασθένεια", "Αναζήτηση βοήθειας / Άδεια", "Συνέχιση μέχρι τελικής πτώσης", "Ξέσπασμα σε συναδέλφους", "Αλκοόλ/Ουσίες", "Ύπνος στο γραφείο"], 
+            correct: 2, 
+            why: "Η βοήθεια είναι ένδειξη δύναμης, όχι αδυναμίας." 
+        }
     ];
 
     let simIndex = 0;
@@ -476,10 +544,16 @@
         document.getElementById('simLevel').innerText = `ΕΠΙΠΕΔΟ ${simIndex + 1} / 10`;
         document.getElementById('simText').innerText = scenarios[simIndex].q;
         
-        const btns = document.querySelectorAll('.sim-btn');
-        btns[0].innerText = "Α: " + scenarios[simIndex].ops[0];
-        btns[1].innerText = "Β: " + scenarios[simIndex].ops[1];
-        btns[2].innerText = "Γ: " + scenarios[simIndex].ops[2];
+        // Generate 7 Buttons
+        const container = document.getElementById('simOptions');
+        container.innerHTML = ''; 
+        scenarios[simIndex].ops.forEach((op, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'sim-btn';
+            btn.innerText = `${index + 1}. ${op}`;
+            btn.onclick = () => checkSim(index);
+            container.appendChild(btn);
+        });
 
         startSimTimer();
     }
@@ -520,11 +594,10 @@
     }
 
     function resetSimQuestion() { loadSim(); }
-    loadSim();
-
-    // --- 4. ARCHIVE / GOOGLE SHEETS & REDIRECT ---
-    // ΠΡΟΣΟΧΗ: ΒΑΛΕ ΤΟ ΔΙΚΟ ΣΟΥ DEPLOYMENT URL ΕΔΩ
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBQC8HT5z_hEHPgMebqHGwNaNY1wwtHsAQ-TeTibBkCMJlDXQMWCGpfN3SdUs3TsAZ8w/exec'; 
+    
+    // --- 4. ARCHIVE & REDIRECT ---
+    // ΠΡΟΣΟΧΗ: ΒΑΛΕ ΕΔΩ ΤΟ ΔΙΚΟ ΣΟΥ GOOGLE SCRIPT URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFnUufvqL1TWc1x5nSEPJEa7L8xg-F7Wjo-_o3yHmPa8utmQr7kVFg3fT6Ce7xCcA87w/exec'; 
 
     function submitLead(e) {
         e.preventDefault();
@@ -544,12 +617,12 @@
             fb.style.display = 'block';
             btn.innerText = "ΕΠΙΤΥΧΙΑ";
             
-            // REDIRECT ΣΤΗ ΣΥΓΚΕΚΡΙΜΕΝΗ ΣΕΛΙΔΑ
+            // REDIRECT ΣΤΟ GITHUB PAGE
             setTimeout(() => {
                 window.location.href = 'https://drdimitrioschionis.github.io/Sprint/';
             }, 2000);
         }).catch(err => {
-            alert("Σφάλμα σύνδεσης.");
+            alert("Σφάλμα σύνδεσης. Δοκιμάστε ξανά.");
             btn.disabled = false;
         });
     }
@@ -557,4 +630,3 @@
 </script>
 </body>
 </html>
-
