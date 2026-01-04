@@ -13,7 +13,6 @@
             --neon-blue: #04d9ff;
             --neon-gold: #ffd700;
             --text-main: #e0e0e0;
-            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
@@ -36,9 +35,9 @@
             justify-content: center; align-items: center;
         }
         .start-btn {
-            background: transparent; border: 2px solid var(--neon-red); color: var(--neon-red);
-            padding: 20px 50px; font-size: 2rem; font-family: 'Creepster'; cursor: pointer;
-            text-shadow: 0 0 10px var(--neon-red); box-shadow: 0 0 20px var(--neon-red);
+            background: transparent; border: 3px solid var(--neon-red); color: var(--neon-red);
+            padding: 20px 60px; font-size: 3rem; font-family: 'Creepster'; cursor: pointer;
+            text-shadow: 0 0 10px var(--neon-red); box-shadow: 0 0 30px var(--neon-red);
             transition: 0.3s; animation: pulse 2s infinite;
         }
         .start-btn:hover { background: var(--neon-red); color: black; }
@@ -67,7 +66,7 @@
         .screen { display: none; width: 100%; max-width: 900px; animation: fadeIn 0.4s; }
         .screen.active { display: block; }
 
-        /* --- REFLEX MODE (OVERLOAD) --- */
+        /* --- REFLEX MODE --- */
         .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
         .reflex-btn {
             background: #111; border: 1px solid #444; color: #aaa; padding: 15px;
@@ -83,30 +82,29 @@
             animation: shake 0.5s infinite; font-family: 'Courier New';
             box-shadow: 5px 5px 0px black; pointer-events: none;
         }
-
         .timer-bg { width: 100%; height: 10px; background: #222; margin: 20px 0; }
         .timer-fill { width: 100%; height: 100%; background: var(--neon-red); transition: width 0.1s linear; }
 
-        /* --- TACTICAL MODE (LOGIC) --- */
+        /* --- TACTICAL MODE --- */
         .logic-row { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
         select {
             width: 100%; padding: 10px; background: #000; color: var(--neon-blue);
-            border: 1px solid var(--neon-blue); font-family: 'VT323'; font-size: 1.4rem;
+            border: 1px solid var(--neon-blue); font-family: 'VT323'; font-size: 1.4rem; cursor: pointer;
         }
-        .logic-feedback { 
-            margin-top: 20px; padding: 20px; border: 1px dashed; font-size: 1.4rem; display: none; 
-        }
+        .logic-feedback { margin-top: 20px; padding: 20px; border: 1px dashed; font-size: 1.4rem; display: none; }
+        .reset-btn { background: transparent; border: 1px solid #666; color: #666; padding: 10px; width: 100%; cursor: pointer; margin-top: 10px; font-family: 'VT323'; font-size: 1.2rem; }
+        .reset-btn:hover { border-color: white; color: white; }
 
         /* --- SIMULATION MODE --- */
-        .sim-card {
-            border: 1px solid #fff; padding: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05);
-        }
+        .sim-card { border: 1px solid #fff; padding: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05); }
         .sim-btn {
-            width: 100%; padding: 12px; margin-top: 10px; background: transparent; 
-            border: 1px solid #555; color: #ccc; cursor: pointer; text-align: left; font-family: 'Roboto Mono';
+            width: 100%; padding: 15px; margin-top: 10px; background: transparent; 
+            border: 1px solid #555; color: #ccc; cursor: pointer; text-align: left; font-family: 'Roboto Mono'; font-size: 1.1rem;
         }
         .sim-btn:hover { border-color: white; color: white; }
-        .progress-bar { color: #888; text-align: right; font-size: 1rem; margin-bottom: 10px; }
+        
+        .sim-timer-bar { width: 100%; height: 5px; background: #333; margin-bottom: 15px; }
+        .sim-timer-fill { width: 100%; height: 100%; background: white; transition: width 1s linear; }
 
         /* --- ARCHIVE MODE --- */
         .archive-box { border: 2px solid var(--neon-gold); padding: 40px; text-align: center; }
@@ -119,9 +117,12 @@
             font-size: 1.5rem; font-weight: bold; margin-top: 15px; cursor: pointer;
         }
 
+        /* --- AUDIO PLAYER (HIDDEN) --- */
+        audio { display: none; }
+
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.8; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 100% { transform: translate(-1px, -2px) rotate(-1deg); } }
 
     </style>
 </head>
@@ -129,10 +130,14 @@
 
     <div class="scanlines"></div>
 
+    <audio id="bgMusic" loop>
+        <source src="theme.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="intro-screen">
         <h1 style="font-size: 5rem; margin-bottom: 20px;">STRESS TACTICS</h1>
         <p style="color: #888; font-family: 'Roboto Mono'; margin-bottom: 40px;">COGNITIVE ENGINEERING WORKSHOP</p>
-        <button class="start-btn" onclick="enterSystem()">ENTER SYSTEM</button>
+        <button class="start-btn" onclick="enterSystem()">ΕΝΑΡΞΗ ΣΥΣΤΗΜΑΤΟΣ</button>
     </div>
 
     <div id="app-container" style="display:none; height: 100%; flex-direction: column;">
@@ -148,105 +153,116 @@
         </header>
 
         <nav>
-            <button class="nav-btn active" data-target="reflex" onclick="setTab('reflex')">I. THREAT</button>
-            <button class="nav-btn" data-target="tactical" onclick="setTab('tactical')">II. LOGIC</button>
-            <button class="nav-btn" data-target="sim" onclick="setTab('sim')">III. SIMULATION</button>
-            <button class="nav-btn" data-target="archive" onclick="setTab('archive')">IV. ARCHIVE</button>
+            <button class="nav-btn active" data-target="reflex" onclick="setTab('reflex')">I. ΑΠΕΙΛΗ</button>
+            <button class="nav-btn" data-target="tactical" onclick="setTab('tactical')">II. ΛΟΓΙΚΗ</button>
+            <button class="nav-btn" data-target="sim" onclick="setTab('sim')">III. ΠΡΟΣΟΜΟΙΩΣΗ</button>
+            <button class="nav-btn" data-target="archive" onclick="setTab('archive')">IV. ΑΡΧΕΙΟ</button>
         </nav>
 
         <main id="main-area">
             
             <div id="reflex" class="screen active">
-                <h2 style="color:var(--neon-red)">// SYSTEM 1: REFLEX OVERLOAD</h2>
+                <h2 style="color:var(--neon-red)">// ΣΥΣΤΗΜΑ 1: ΥΠΕΡΦΟΡΤΩΣΗ</h2>
                 <div style="background:#222; padding:15px; border-left:4px solid var(--neon-red); font-family:'Roboto Mono'; margin-bottom:10px;">
-                    INCOMING CHAT: "Επειδή ο Δημήτριος πάλι ξέχασε να στείλει τα αρχεία, θα χρειαστεί να δουλέψουμε όλοι το Σαββατοκύριακο."
+                    ΕΙΣΕΡΧΟΜΕΝΟ CHAT: "Επειδή ο Δημήτριος πάλι ξέχασε να στείλει τα αρχεία, θα χρειαστεί να δουλέψουμε όλοι το Σαββατοκύριακο."
                 </div>
                 
                 <div class="timer-bg"><div id="timerBar" class="timer-fill"></div></div>
 
                 <div class="option-grid" id="reflexOptions">
-                    <button class="reflex-btn" onclick="reflexReact('Attack')">1. "Τι λες ρε; Εσύ φταις!" (ATTACK)</button>
-                    <button class="reflex-btn" onclick="reflexReact('Defend')">2. "Εγώ τα έστειλα, δεν ξέρω τι λες." (DEFEND)</button>
-                    <button class="reflex-btn" onclick="reflexReact('Freeze')">3. ... (Δεν απαντάω, παγώνω) (FREEZE)</button>
-                    <button class="reflex-btn" onclick="reflexReact('Irony')">4. "Συγχαρητήρια για την οργάνωση..." (PASSIVE AGGRESSIVE)</button>
-                    <button class="reflex-btn" onclick="reflexReact('Panic')">5. "Συγγνώμη, συγγνώμη, έρχομαι τώρα!" (FAWN)</button>
-                    <button class="reflex-btn" onclick="reflexReact('Quit')">6. "Παραιτούμαι, δεν αντέχω άλλο." (ESCAPE)</button>
-                    <button class="reflex-btn" onclick="reflexReact('Gossip')">7. Στέλνω DM σε άλλον: "Είδες τι έγραψε;" (VENT)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Επίθεση')">1. "Τι λες ρε; Εσύ φταις!" (ΕΠΙΘΕΣΗ)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Άμυνα')">2. "Εγώ τα έστειλα, δεν ξέρω τι λες." (ΑΜΥΝΑ)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Πάγωμα')">3. ... (Δεν απαντάω, κοιτάω την οθόνη) (ΠΑΓΩΜΑ)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Ειρωνεία')">4. "Συγχαρητήρια για την οργάνωση..." (ΕΙΡΩΝΕΙΑ)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Υποταγή')">5. "Συγγνώμη, συγγνώμη, έρχομαι τώρα!" (ΥΠΟΤΑΓΗ)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Φυγή')">6. "Παραιτούμαι, δεν αντέχω άλλο." (ΦΥΓΗ)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Κουτσομπολιό')">7. Στέλνω DM σε άλλον: "Είδες τι έγραψε;" (ΕΚΤΟΝΩΣΗ)</button>
                 </div>
                 <div id="reflexFb" style="margin-top:20px; color:var(--neon-red); display:none; font-size:1.5rem; text-align:center;">
-                    > SYSTEM OVERLOAD. DECISION COMPROMISED.
+                    > ΣΥΣΤΗΜΙΚΗ ΑΠΟΤΥΧΙΑ. Η ΚΡΙΣΗ ΘΟΛΩΣΕ.
                 </div>
             </div>
 
             <div id="tactical" class="screen">
-                <h2 style="color:var(--neon-blue)">// SYSTEM 2: COGNITIVE PROTOCOL</h2>
-                <p>ALIGN THE PROTOCOL TO UNLOCK RESPONSE:</p>
+                <h2 style="color:var(--neon-blue)">// ΣΥΣΤΗΜΑ 2: ΠΡΩΤΟΚΟΛΛΟ ΛΟΓΙΚΗΣ</h2>
+                <p>ΒΡΕΙΤΕ ΤΟΝ ΣΩΣΤΟ ΣΥΝΔΥΑΣΜΟ ΓΙΑ ΝΑ ΞΕΚΛΕΙΔΩΣΕΤΕ ΤΗ ΛΥΣΗ:</p>
                 
                 <div class="logic-row">
-                    <label>STEP 1: EMOTIONAL STATE</label>
+                    <label>ΒΗΜΑ 1: ΣΥΝΑΙΣΘΗΜΑΤΙΚΗ ΚΑΤΑΣΤΑΣΗ</label>
                     <select id="step1">
-                        <option value="null">-- SELECT --</option>
-                        <option value="angry">ANGER (Fight Back)</option>
-                        <option value="scared">FEAR (Hide)</option>
-                        <option value="detached">DETACHED (Observer)</option>
+                        <option value="null">-- ΕΠΙΛΟΓΗ --</option>
+                        <option value="angry">ΘΥΜΟΣ (Αντεπίθεση)</option>
+                        <option value="scared">ΦΟΒΟΣ (Απόκρυψη)</option>
+                        <option value="detached">ΑΠΟΣΤΑΣΙΟΠΟΙΗΣΗ (Παρατηρητής)</option>
                     </select>
                 </div>
                 <div class="logic-row">
-                    <label>STEP 2: FACT CHECKING</label>
+                    <label>ΒΗΜΑ 2: ΕΛΕΓΧΟΣ ΓΕΓΟΝΟΤΩΝ</label>
                     <select id="step2">
-                        <option value="null">-- SELECT --</option>
-                        <option value="guess">ASSUMPTION (I think I sent them)</option>
-                        <option value="ignore">IRRELEVANT (Doesn't matter)</option>
-                        <option value="verify">VERIFIED (Checked Sent Items)</option>
+                        <option value="null">-- ΕΠΙΛΟΓΗ --</option>
+                        <option value="guess">ΕΙΚΑΣΙΑ (Νομίζω τα έστειλα)</option>
+                        <option value="ignore">ΑΔΙΑΦΟΡΙΑ (Δεν έχει σημασία)</option>
+                        <option value="verify">ΕΠΑΛΗΘΕΥΣΗ (Έλεγχος απεσταλμένων)</option>
                     </select>
                 </div>
                 <div class="logic-row">
-                    <label>STEP 3: OBJECTIVE</label>
+                    <label>ΒΗΜΑ 3: ΣΤΟΧΟΣ</label>
                     <select id="step3">
-                        <option value="null">-- SELECT --</option>
-                        <option value="win">WIN THE ARGUMENT</option>
-                        <option value="peace">KEEP THE PEACE (Submit)</option>
-                        <option value="solve">SOLVE THE PROBLEM</option>
+                        <option value="null">-- ΕΠΙΛΟΓΗ --</option>
+                        <option value="win">ΝΑ ΝΙΚΗΣΩ ΤΟΝ ΚΑΒΓΑ</option>
+                        <option value="peace">ΝΑ ΕΧΩ ΤΗΝ ΗΣΥΧΙΑ ΜΟΥ</option>
+                        <option value="solve">ΝΑ ΛΥΣΩ ΤΟ ΠΡΟΒΛΗΜΑ</option>
                     </select>
                 </div>
 
-                <button class="btn-gold" style="background:var(--neon-blue); width:100%; border:none; margin-top:20px;" onclick="checkLogic()">EXECUTE PROTOCOL</button>
+                <button class="btn-gold" style="background:var(--neon-blue); width:100%; border:none; margin-top:20px;" onclick="checkLogic()">ΕΚΤΕΛΕΣΗ ΠΡΩΤΟΚΟΛΛΟΥ</button>
+                <button class="reset-btn" onclick="resetLogic()">ΕΠΑΝΑΦΟΡΑ ΣΥΣΤΗΜΑΤΟΣ</button>
                 
                 <div id="logicFb" class="logic-feedback"></div>
             </div>
 
             <div id="sim" class="screen">
-                <h2 style="color:white">// SIMULATION: ESCALATION (10 LEVELS)</h2>
-                <div class="progress-bar" id="simProgress">LEVEL 1 / 10</div>
+                <h2 style="color:white">// ΠΡΟΣΟΜΟΙΩΣΗ: ΚΛΙΜΑΚΩΣΗ (10 LEVELS)</h2>
+                <div id="sim-info" style="display:flex; justify-content:space-between; color:#888;">
+                    <span id="simLevel">ΕΠΙΠΕΔΟ 1 / 10</span>
+                </div>
+                <div class="sim-timer-bar"><div id="simTimerFill" class="sim-timer-fill"></div></div>
                 
                 <div id="simCard" class="sim-card">
-                    <div id="simText" style="font-size:1.3rem; margin-bottom:20px;">SCENARIO TEXT LOADING...</div>
-                    <button class="sim-btn" onclick="nextSim(0)">OPTION A</button>
-                    <button class="sim-btn" onclick="nextSim(1)">OPTION B</button>
-                    <button class="sim-btn" onclick="nextSim(2)">OPTION C</button>
+                    <div id="simText" style="font-size:1.3rem; margin-bottom:20px; font-weight:bold; color:white;">ΦΟΡΤΩΣΗ ΣΕΝΑΡΙΟΥ...</div>
+                    <button class="sim-btn" onclick="checkSim(0)">ΕΠΙΛΟΓΗ Α</button>
+                    <button class="sim-btn" onclick="checkSim(1)">ΕΠΙΛΟΓΗ Β</button>
+                    <button class="sim-btn" onclick="checkSim(2)">ΕΠΙΛΟΓΗ Γ</button>
                 </div>
+                
+                <div id="simFeedback" style="display:none; border:2px solid var(--neon-red); padding:20px; background:#111;">
+                    <h3 style="color:var(--neon-red); margin-top:0;">ΣΦΑΛΜΑ ΛΟΓΙΚΗΣ</h3>
+                    <p id="simReason" style="font-size:1.2rem;"></p>
+                    <button class="sim-btn" style="border-color:var(--neon-red); color:var(--neon-red);" onclick="resetSimQuestion()">ΕΠΑΝΑΦΟΡΑ ΕΡΩΤΗΣΗΣ</button>
+                </div>
+
                 <div id="simEnd" style="display:none; text-align:center; color:var(--neon-gold); font-size:1.5rem;">
-                    SIMULATION COMPLETE.<br>STRESS TOLERANCE ANALYSIS: FINISHED.
+                    Η ΠΡΟΣΟΜΟΙΩΣΗ ΟΛΟΚΛΗΡΩΘΗΚΕ.<br>ΑΝΑΛΥΣΗ ΑΝΤΟΧΗΣ: ΕΠΙΤΥΧΗΣ.
                 </div>
             </div>
 
             <div id="archive" class="screen">
                 <div class="archive-box">
-                    <h2 style="color:var(--neon-gold); border:none;">// ARCHIVE ACCESS</h2>
-                    <p>ENTER EMAIL TO RECEIVE:</p>
+                    <h2 style="color:var(--neon-gold); border:none;">// ΠΡΟΣΒΑΣΗ ΑΡΧΕΙΟΥ</h2>
+                    <p>ΕΙΣΑΓΕΤΕ EMAIL ΓΙΑ ΛΗΨΗ:</p>
                     <ul style="text-align:left; color:#aaa; margin: 20px auto; width: fit-content;">
-                        <li>[PDF] Complete Workshop Presentation</li>
-                        <li>[LINK] LinkedIn Profile (Dr. Chionis)</li>
+                        <li>[PDF] Παρουσίαση Workshop</li>
+                        <li>[LINK] Προφίλ LinkedIn (Dr. Chionis)</li>
                         <li>[LINK] GitHub Repository</li>
                     </ul>
                     
                     <form id="leadForm" onsubmit="submitLead(event)">
-                        <input type="email" id="userEmail" name="email" required placeholder="ENTER YOUR EMAIL">
-                        <button type="submit" class="btn-gold">INITIATE TRANSFER</button>
+                        <input type="email" id="userEmail" name="email" required placeholder="ΤΟ EMAIL ΣΑΣ">
+                        <button type="submit" class="btn-gold" id="submitBtn">ΕΚΚΙΝΗΣΗ ΜΕΤΑΦΟΡΑΣ</button>
                     </form>
                     
                     <div id="leadFb" style="margin-top:20px; color:var(--neon-gold); display:none;">
-                        > DATA SENT. CHECK YOUR INBOX.<br>> REDIRECTING TO LINKEDIN...
+                        > ΔΕΔΟΜΕΝΑ ΑΠΕΣΤΑΛΗΣΑΝ.<br>> ΑΝΑΚΑΤΕΥΘΥΝΣΗ...
                     </div>
                 </div>
             </div>
@@ -255,16 +271,28 @@
     </div>
 
 <script>
-    // --- GLOBAL STATE ---
-    let overloadTriggered = false;
-    let reflexTimer;
-    let simIndex = 0;
+    // --- AUDIO SYSTEM ---
+    const bgMusic = document.getElementById('bgMusic');
+    // Simple Tick Sound Synthesizer (No file needed)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playTick() {
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.type = 'square';
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    }
 
     // --- INTRO ---
     function enterSystem() {
         document.getElementById('intro-screen').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
-        // Optional: Start Intro Sound here
+        bgMusic.play().catch(e => console.log("Audio requires interaction"));
     }
 
     // --- NAV ---
@@ -275,15 +303,19 @@
         document.querySelector(`.nav-btn[data-target="${id}"]`).classList.add('active');
 
         if(id === 'reflex') startReflex();
+        if(id === 'sim') startSimTimer(); // Start timer when entering sim
     }
 
-    // --- REFLEX LOGIC (OVERLOAD) ---
+    // --- 1. REFLEX LOGIC ---
+    let reflexTimer;
+    let overloadTriggered = false;
+
     function startReflex() {
         clearInterval(reflexTimer);
         const bar = document.getElementById('timerBar');
         const fb = document.getElementById('reflexFb');
         document.getElementById('reflexOptions').style.opacity = '1';
-        document.querySelectorAll('.popup-msg').forEach(e => e.remove()); // Clear old popups
+        document.querySelectorAll('.popup-msg').forEach(e => e.remove());
         
         fb.style.display = 'none';
         let width = 100;
@@ -293,23 +325,20 @@
             width -= 0.5;
             bar.style.width = width + '%';
 
-            // TRIGGER OVERLOAD AT 50%
             if (width < 50 && !overloadTriggered) {
                 overloadTriggered = true;
                 triggerOverload();
             }
-
             if (width <= 0) {
                 clearInterval(reflexTimer);
                 fb.style.display = 'block';
             }
-        }, 50); // Speed of timer
+        }, 50);
     }
 
     function triggerOverload() {
-        const msgs = ["NEW EMAIL FROM BOSS", "HR NOTIFICATION", "MISSED CALL", "CLIENT ANGRY", "SYSTEM ERROR", "DEADLINE MISSED"];
+        const msgs = ["ΝΕΟ EMAIL ΑΠΟ ΤΟΝ ΔΙΕΥΘΥΝΤΗ", "ΕΙΔΟΠΟΙΗΣΗ HR", "ΑΝΑΠΑΝΤΗΤΗ ΚΛΗΣΗ", "Ο ΠΕΛΑΤΗΣ ΘΥΜΩΣΕ", "ΣΦΑΛΜΑ ΣΥΣΤΗΜΑΤΟΣ", "ΠΡΟΘΕΣΜΙΑ ΕΛΗΞΕ"];
         const container = document.getElementById('reflex');
-        
         let count = 0;
         const interval = setInterval(() => {
             if(count > 15) clearInterval(interval);
@@ -325,110 +354,164 @@
 
     function reflexReact(type) {
         clearInterval(reflexTimer);
-        alert("RESPONSE LOGGED: " + type + "\n(Notice how the pressure affected your choice?)");
+        alert("ΚΑΤΑΓΡΑΦΗ ΑΝΤΙΔΡΑΣΗΣ: " + type + "\n(Παρατηρήσατε πώς η πίεση επηρέασε την επιλογή σας;)");
     }
 
-    // --- TACTICAL LOGIC (BRANCHED) ---
+    // --- 2. TACTICAL LOGIC ---
     function checkLogic() {
         const s1 = document.getElementById('step1').value;
         const s2 = document.getElementById('step2').value;
         const s3 = document.getElementById('step3').value;
         const fb = document.getElementById('logicFb');
-
         fb.style.display = 'block';
         
-        // LOGIC TREE
-        if (s1 === 'detached' && s2 === 'verify' && s3 === 'solve') {
-            fb.style.color = 'var(--neon-blue)';
-            fb.style.borderColor = 'var(--neon-blue)';
-            fb.innerHTML = "> ACCESS GRANTED.<br>Protocol Correct. You separated emotion, checked facts, and aimed for a solution.";
+        // Logic Combinations
+        const key = `${s1}-${s2}-${s3}`;
+        
+        if (key === 'detached-verify-solve') {
+             fb.style.color = 'var(--neon-blue)';
+             fb.style.borderColor = 'var(--neon-blue)';
+             fb.innerHTML = "> ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ.<br>Σωστό Πρωτόκολλο: Αποστασιοποίηση, Γεγονότα, Λύση.";
         } else if (s1 === 'angry') {
-            fb.style.color = 'var(--neon-red)';
-            fb.style.borderColor = 'var(--neon-red)';
-            fb.innerHTML = "> FAILURE: EMOTIONAL INTERFERENCE.<br>Fighting back while angry escalates the conflict.";
-        } else if (s2 === 'guess' || s2 === 'ignore') {
-            fb.style.color = 'var(--neon-gold)';
-            fb.style.borderColor = 'var(--neon-gold)';
-            fb.innerHTML = "> WARNING: DATA INSUFFICIENT.<br>Acting without verifying facts leads to errors.";
+             fb.style.color = 'var(--neon-red)'; fb.style.borderColor = 'var(--neon-red)';
+             fb.innerHTML = "> ΣΦΑΛΜΑ: ΣΥΝΑΙΣΘΗΜΑΤΙΚΗ ΠΑΡΕΜΒΟΛΗ.<br>Ο θυμός τυφλώνει την κρίση.";
+        } else if (s2 === 'guess') {
+             fb.style.color = 'var(--neon-gold)'; fb.style.borderColor = 'var(--neon-gold)';
+             fb.innerHTML = "> ΠΡΟΕΙΔΟΠΟΙΗΣΗ: ΑΝΕΠΑΡΚΗ ΔΕΔΟΜΕΝΑ.<br>Η εικασία οδηγεί σε λάθη.";
         } else if (s3 === 'win') {
-            fb.style.color = 'var(--neon-red)';
-            fb.style.borderColor = 'var(--neon-red)';
-            fb.innerHTML = "> FAILURE: WRONG OBJECTIVE.<br>Trying to 'win' creates an enemy, not a solution.";
+             fb.style.color = 'var(--neon-red)'; fb.style.borderColor = 'var(--neon-red)';
+             fb.innerHTML = "> ΣΦΑΛΜΑ: ΛΑΘΟΣ ΣΤΟΧΟΣ.<br>Η προσπάθεια για 'νίκη' δημιουργεί εχθρούς.";
         } else {
-            fb.style.color = '#fff';
-            fb.style.borderColor = '#fff';
-            fb.innerHTML = "> ERROR: MISALIGNED PROTOCOL.<br>Try again.";
+             fb.style.color = '#fff'; fb.style.borderColor = '#fff';
+             fb.innerHTML = "> ΣΦΑΛΜΑ: ΑΣΥΜΒΑΤΟΣ ΣΥΝΔΥΑΣΜΟΣ.<br>Προσπαθήστε ξανά.";
         }
     }
 
-    // --- SIMULATION LOGIC (10 SCENARIOS) ---
+    function resetLogic() {
+        document.getElementById('step1').value = 'null';
+        document.getElementById('step2').value = 'null';
+        document.getElementById('step3').value = 'null';
+        document.getElementById('logicFb').style.display = 'none';
+    }
+
+    // --- 3. SIMULATION LOGIC ---
     const scenarios = [
-        { t: "LVL 1: Typo in Email sent to team.", ops: ["Panic", "Ignore", "Correction Email"] },
-        { t: "LVL 2: Passive aggressive comment from coworker.", ops: ["Argue", "Vent to others", "Clarify intent"] },
-        { t: "LVL 3: Client changes deadline to Tomorrow.", ops: ["Refuse", "Overwork", "Negotiate scope"] },
-        { t: "LVL 4: Internet goes down during call.", ops: ["Scream", "Freeze", "Hotspot & Rejoin"] },
-        { t: "LVL 5: Public feedback in meeting (Negative).", ops: ["Defend", "Shut down", "Ask for details"] },
-        { t: "LVL 6: Rumor spreading about layoffs.", ops: ["Spread it", "Panic apply", "Verify source"] },
-        { t: "LVL 7: Salary delayed by 3 days.", ops: ["Threaten HR", "borrow money", "Ask formally"] },
-        { t: "LVL 8: Major data loss (Unsaved work).", ops: ["Break keyboard", "Cry", "IT recovery"] },
-        { t: "LVL 9: Hacking attempt on account.", ops: ["Ignore", "Click link", "Report Security"] },
-        { t: "LVL 10: TOTAL BURNOUT.", ops: ["Quit now", "Fake sick", "Seek help"] }
+        { q: "ΣΤΑΔΙΟ 1: Ένα ορθογραφικό λάθος σε email προς όλη την ομάδα.", ops: ["Πανικός & 2ο email", "Αγνόηση", "Ήρεμη διόρθωση"], correct: 2, why: "Ο πανικός μεγεθύνει το πρόβλημα. Η αγνόηση δείχνει αδιαφορία." },
+        { q: "ΣΤΑΔΙΟ 2: Παθητικά επιθετικό σχόλιο από συνάδελφο.", ops: ["Καβγάς", "Κουτσομπολιό", "Διευκρίνιση πρόθεσης"], correct: 2, why: "Ο καβγάς και το κουτσομπολιό δεν λύνουν το θέμα, απλά το ανακυκλώνουν." },
+        { q: "ΣΤΑΔΙΟ 3: Ο πελάτης αλλάζει την προθεσμία για αύριο.", ops: ["Άρνηση", "Υπερωρίες σιωπηλά", "Διαπραγμάτευση εύρους"], correct: 2, why: "Η σιωπηλή θυσία οδηγεί σε burnout. Η διαπραγμάτευση είναι επαγγελματισμός." },
+        { q: "ΣΤΑΔΙΟ 4: Διακοπή ίντερνετ κατά τη διάρκεια παρουσίασης.", ops: ["Ουρλιαχτά", "Πάγωμα", "Hotspot & Επανασύνδεση"], correct: 2, why: "Τα τεχνικά προβλήματα λύνονται με τεχνικές λύσεις, όχι με φωνές." },
+        { q: "ΣΤΑΔΙΟ 5: Αρνητικό feedback δημόσια.", ops: ["Άμυνα", "Κατάρρευση", "Ερώτηση για λεπτομέρειες"], correct: 2, why: "Η άμυνα δείχνει ανασφάλεια. Οι ερωτήσεις δείχνουν επιθυμία για βελτίωση." },
+        { q: "ΣΤΑΔΙΟ 6: Φήμη για απολύσεις στο γραφείο.", ops: ["Διάδοση φήμης", "Πανικός", "Έλεγχος πηγής"], correct: 2, why: "Η διασπορά φημών αυξάνει το συλλογικό άγχος χωρίς λόγο." },
+        { q: "ΣΤΑΔΙΟ 7: Καθυστέρηση μισθοδοσίας 3 μέρες.", ops: ["Απειλές", "Δανεικά", "Επίσημη ερώτηση"], correct: 2, why: "Οι απειλές καταστρέφουν γέφυρες. Η επίσημη οδός είναι η μόνη ασφαλής." },
+        { q: "ΣΤΑΔΙΟ 8: Χάθηκε σημαντικό αρχείο (Unsaved).", ops: ["Σπάσιμο πληκτρολογίου", "Κλάμα", "IT recovery"], correct: 2, why: "Το ξέσπασμα κοστίζει εξοπλισμό. Το IT μπορεί να έχει backup." },
+        { q: "ΣΤΑΔΙΟ 9: Ύποπτο email ασφαλείας.", ops: ["Αγνόηση", "Κλικ στο link", "Αναφορά Security"], correct: 2, why: "Το κλικ είναι μοιραίο. Η αναφορά προστατεύει την εταιρεία." },
+        { q: "ΣΤΑΔΙΟ 10: ΟΛΙΚΗ ΕΞΟΥΘΕΝΩΣΗ (BURNOUT).", ops: ["Παραίτηση τώρα", "Ψεύτικη ασθένεια", "Αναζήτηση βοήθειας"], correct: 2, why: "Η παρορμητική παραίτηση δημιουργεί οικονομικό πρόβλημα. Η βοήθεια είναι δύναμη." }
     ];
+
+    let simIndex = 0;
+    let simTimer;
 
     function loadSim() {
         if(simIndex >= scenarios.length) {
             document.getElementById('simCard').style.display = 'none';
+            document.getElementById('simFeedback').style.display = 'none';
             document.getElementById('simEnd').style.display = 'block';
+            clearInterval(simTimer);
             return;
         }
-        document.getElementById('simProgress').innerText = `LEVEL ${simIndex + 1} / 10`;
-        document.getElementById('simText').innerText = scenarios[simIndex].t;
+        
+        // Setup UI
+        document.getElementById('simCard').style.display = 'block';
+        document.getElementById('simFeedback').style.display = 'none';
+        document.getElementById('simLevel').innerText = `ΕΠΙΠΕΔΟ ${simIndex + 1} / 10`;
+        document.getElementById('simText').innerText = scenarios[simIndex].q;
+        
         const btns = document.querySelectorAll('.sim-btn');
-        btns[0].innerText = "A: " + scenarios[simIndex].ops[0];
-        btns[1].innerText = "B: " + scenarios[simIndex].ops[1];
-        btns[2].innerText = "C: " + scenarios[simIndex].ops[2];
+        btns[0].innerText = "Α: " + scenarios[simIndex].ops[0];
+        btns[1].innerText = "Β: " + scenarios[simIndex].ops[1];
+        btns[2].innerText = "Γ: " + scenarios[simIndex].ops[2];
+
+        startSimTimer();
     }
-    
-    function nextSim(choice) {
-        simIndex++;
+
+    function startSimTimer() {
+        clearInterval(simTimer);
+        let width = 0;
+        const bar = document.getElementById('simTimerFill');
+        bar.style.width = '0%';
+        
+        simTimer = setInterval(() => {
+            width += 1; // 1% per 100ms approx 10 sec total
+            bar.style.width = width + '%';
+            if(width % 10 === 0) playTick(); // Tick sound every second
+            
+            if(width >= 100) {
+                clearInterval(simTimer);
+                showSimFail("ΕΛΗΞΕ Ο ΧΡΟΝΟΣ. Η αδράνεια είναι επιλογή με κόστος.");
+            }
+        }, 100);
+    }
+
+    function checkSim(choiceIndex) {
+        clearInterval(simTimer);
+        if(choiceIndex === scenarios[simIndex].correct) {
+            simIndex++;
+            loadSim();
+        } else {
+            showSimFail(scenarios[simIndex].why);
+        }
+    }
+
+    function showSimFail(reason) {
+        document.getElementById('simCard').style.display = 'none';
+        const fb = document.getElementById('simFeedback');
+        fb.style.display = 'block';
+        document.getElementById('simReason').innerText = reason;
+    }
+
+    function resetSimQuestion() {
+        // Reload same question
         loadSim();
     }
-    loadSim(); // Init
-
-    // --- ARCHIVE / LEAD GEN (GOOGLE SHEETS) ---
     
-    // ΣΗΜΑΝΤΙΚΟ: ΑΝΤΙΚΑΤΑΣΤΗΣΕ ΑΥΤΟ ΤΟ URL ME TO URL TOY SCRIPT ΣΟΥ
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyN4j7QaSQzL2MG1-NRHcXgd38Js_aaxlWtiXZSuDCOuARWeoDjp-RBu-2ROD2CfqjgZg/exec'; 
+    // Init Sim
+    loadSim();
+
+    // --- 4. ARCHIVE / GOOGLE SHEETS ---
+    // ΠΡΟΣΟΧΗ: Αντικατέστησε αυτό με το δικό σου Web App URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkxUFYW4kzMfjpAe71CAiOI4mCYGCizPXI0qb1XLN_NTsPfXQD2ayLvQu31ptZFXK-rw/exec'; 
 
     function submitLead(e) {
         e.preventDefault();
         const email = document.getElementById('userEmail').value;
-        const btn = document.querySelector('.btn-gold');
+        const btn = document.getElementById('submitBtn');
         const fb = document.getElementById('leadFb');
 
-        btn.innerText = "SENDING...";
+        btn.innerText = "ΑΠΟΣΤΟΛΗ...";
         btn.disabled = true;
 
-        // Send to Google Sheets
+        // Χρήση no-cors mode (τυφλή αποστολή για αποφυγή CORS errors)
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Important for Google Script
+            mode: 'no-cors', 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email })
         }).then(() => {
+            // Επειδή είναι no-cors, υποθέτουμε επιτυχία αν δεν σκάσει
             fb.style.display = 'block';
-            btn.innerText = "DONE";
-            // Optional: Redirect to LinkedIn after 3 seconds
+            btn.innerText = "ΕΠΙΤΥΧΙΑ";
+            
+            // Redirect μετά από 3 δευτερόλεπτα
             setTimeout(() => {
-                window.open('https://www.linkedin.com/in/YOUR_PROFILE', '_blank');
+                window.location.href = 'https://drdimitrioschionis.github.io/Sprint/';
             }, 3000);
         }).catch(err => {
-            alert("Error sending data. Check internet.");
+            alert("Σφάλμα σύνδεσης. Προσπαθήστε ξανά.");
             btn.disabled = false;
+            btn.innerText = "ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ";
         });
     }
 
 </script>
 </body>
 </html>
-
