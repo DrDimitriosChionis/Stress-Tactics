@@ -8,7 +8,7 @@
     
     <style>
         :root {
-            --bg-void: #080808;
+            --bg-void: #050505;
             --neon-red: #ff003c;
             --neon-blue: #04d9ff;
             --neon-gold: #ffd700;
@@ -17,142 +17,111 @@
         }
 
         body {
-            margin: 0;
-            background-color: var(--bg-void);
-            color: var(--text-main);
-            font-family: 'VT323', monospace;
-            height: 100vh;
-            overflow: hidden; /* No scrolling for app-like feel */
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- BACKGROUND FX --- */
-        .scanlines {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
-            background-size: 100% 4px;
-            pointer-events: none; z-index: 5; opacity: 0.7;
-        }
-
-        /* --- HEADER & ID CARD --- */
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 40px; border-bottom: 2px solid #333;
-            background: rgba(0,0,0,0.9); z-index: 20;
-        }
-
-        h1 {
-            font-family: 'Creepster', cursive;
-            font-size: 3rem; margin: 0; color: var(--neon-red);
-            text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
-            letter-spacing: 2px;
-        }
-
-        /* Digital ID Card Style */
-        .id-card {
-            display: flex; align-items: center; gap: 15px;
-            border: 1px solid var(--neon-blue); padding: 5px 20px;
-            border-radius: 8px; background: rgba(4, 217, 255, 0.05);
-            box-shadow: 0 0 15px rgba(4, 217, 255, 0.1);
-        }
-
-        .id-photo {
-            width: 50px; height: 50px; border-radius: 50%;
-            object-fit: cover; border: 2px solid var(--neon-blue);
-            filter: grayscale(100%) contrast(120%); /* Sci-fi look */
-        }
-
-        .id-info { display: flex; flex-direction: column; line-height: 1.1; }
-        .id-role { font-family: 'Roboto Mono'; font-size: 0.7rem; color: var(--neon-blue); letter-spacing: 1px; }
-        .id-name { font-family: 'VT323'; font-size: 1.4rem; color: white; font-weight: bold; }
-
-        /* --- NAVIGATION --- */
-        nav {
-            display: flex; gap: 2px; background: #151515; z-index: 20;
-        }
-
-        .nav-btn {
-            flex: 1; border: none; background: #111; color: #666;
-            padding: 15px; font-family: 'VT323', monospace; font-size: 1.5rem;
-            cursor: pointer; transition: 0.3s; text-transform: uppercase;
-            border-bottom: 3px solid transparent;
-        }
-
-        .nav-btn:hover { background: #222; color: #fff; }
-        .nav-btn.active { background: var(--bg-void); color: white; }
-        
-        /* Specific Tab Colors */
-        .nav-btn.active[data-target="reflex"] { border-bottom-color: var(--neon-red); color: var(--neon-red); text-shadow: 0 0 8px var(--neon-red); }
-        .nav-btn.active[data-target="tactical"] { border-bottom-color: var(--neon-blue); color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
-        .nav-btn.active[data-target="sim"] { border-bottom-color: white; color: white; text-shadow: 0 0 8px white; }
-        .nav-btn.active[data-target="archive"] { border-bottom-color: var(--neon-gold); color: var(--neon-gold); text-shadow: 0 0 8px var(--neon-gold); }
-
-        /* --- MAIN CONTENT --- */
-        main {
-            flex: 1; padding: 40px;
-            display: flex; justify-content: center; align-items: flex-start;
-            overflow-y: auto; z-index: 10;
-        }
-
-        .screen { display: none; width: 100%; max-width: 900px; animation: fadeIn 0.4s ease-out; }
-        .screen.active { display: block; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- COMPONENTS --- */
-        h2 { font-size: 2rem; border-bottom: 1px solid #444; margin-top: 0; padding-bottom: 10px; }
-        p.desc { font-size: 1.3rem; margin-bottom: 20px; font-family: 'Roboto Mono'; }
-
-        /* Reflex Mode */
-        .timer-bg { width: 100%; height: 25px; background: #222; border: 1px solid #555; margin: 20px 0; }
-        .timer-fill { width: 100%; height: 100%; background: var(--neon-red); box-shadow: 0 0 20px var(--neon-red); transition: width 0.1s linear; }
-        
-        textarea {
-            width: 100%; height: 150px; background: #111; border: 2px solid #444;
-            color: white; font-family: 'VT323'; font-size: 1.6rem; padding: 15px;
-            box-sizing: border-box; resize: none; outline: none;
-        }
-        textarea:focus { border-color: white; }
-
-        /* Tactical Mode */
-        .checklist { border: 1px solid var(--neon-blue); background: rgba(4, 217, 255, 0.05); padding: 20px; margin-bottom: 20px; }
-        .check-item { display: flex; align-items: center; gap: 15px; font-size: 1.5rem; margin-bottom: 10px; cursor: pointer; color: var(--neon-blue); }
-        .check-item input { width: 25px; height: 25px; accent-color: var(--neon-blue); cursor: pointer; }
-
-        /* Simulation Mode */
-        .terminal {
-            background: black; border: 2px solid white; padding: 30px;
-            box-shadow: 0 0 40px rgba(255,255,255,0.1); min-height: 400px;
+            margin: 0; background-color: var(--bg-void); color: var(--text-main);
+            font-family: 'VT323', monospace; height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
         }
-        .type-area { font-family: 'Roboto Mono', monospace; font-size: 1.6rem; line-height: 1.5; white-space: pre-wrap; flex: 1; }
-        .cursor::after { content: '█'; animation: blink 1s infinite; color: var(--neon-blue); }
+
+        /* --- FX LAYERS --- */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 100% 4px; pointer-events: none; z-index: 5; opacity: 0.6;
+        }
+
+        /* --- INTRO PAGE --- */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 1000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        .start-btn {
+            background: transparent; border: 2px solid var(--neon-red); color: var(--neon-red);
+            padding: 20px 50px; font-size: 2rem; font-family: 'Creepster'; cursor: pointer;
+            text-shadow: 0 0 10px var(--neon-red); box-shadow: 0 0 20px var(--neon-red);
+            transition: 0.3s; animation: pulse 2s infinite;
+        }
+        .start-btn:hover { background: var(--neon-red); color: black; }
+
+        /* --- HEADER --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 40px; border-bottom: 2px solid #333; background: rgba(0,0,0,0.9); z-index: 20;
+        }
+        h1 { font-family: 'Creepster'; font-size: 2.5rem; margin: 0; color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+        .id-card { display: flex; align-items: center; gap: 15px; border: 1px solid var(--neon-blue); padding: 5px 20px; border-radius: 8px; }
+        .id-photo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--neon-blue); filter: grayscale(100%); }
+        .id-info { display: flex; flex-direction: column; line-height: 1; }
+
+        /* --- NAV --- */
+        nav { display: flex; gap: 2px; background: #111; z-index: 20; }
+        .nav-btn { flex: 1; border: none; background: #111; color: #666; padding: 15px; font-family: 'VT323'; font-size: 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; }
+        .nav-btn.active { background: var(--bg-void); color: white; }
+        .nav-btn.active[data-target="reflex"] { border-color: var(--neon-red); color: var(--neon-red); }
+        .nav-btn.active[data-target="tactical"] { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .nav-btn.active[data-target="sim"] { border-color: white; color: white; }
+        .nav-btn.active[data-target="archive"] { border-color: var(--neon-gold); color: var(--neon-gold); }
+
+        /* --- MAIN --- */
+        main { flex: 1; padding: 20px; display: flex; justify-content: center; align-items: flex-start; overflow-y: auto; z-index: 10; position: relative; }
+        .screen { display: none; width: 100%; max-width: 900px; animation: fadeIn 0.4s; }
+        .screen.active { display: block; }
+
+        /* --- REFLEX MODE (OVERLOAD) --- */
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .reflex-btn {
+            background: #111; border: 1px solid #444; color: #aaa; padding: 15px;
+            font-family: 'Roboto Mono'; font-size: 1.1rem; cursor: pointer; text-align: left;
+            transition: 0.2s; position: relative; z-index: 20;
+        }
+        .reflex-btn:hover { border-color: var(--neon-red); color: white; background: #222; }
         
-        .poll-area { margin-top: 20px; border-top: 2px solid #333; padding-top: 20px; display: none; flex-direction: column; gap: 15px; }
-        .poll-btn {
-            background: transparent; border: 2px solid #555; color: #aaa;
-            padding: 15px; text-align: left; font-family: 'Roboto Mono'; font-size: 1.3rem;
-            cursor: pointer; transition: 0.2s;
+        /* Overload Popups */
+        .popup-msg {
+            position: absolute; background: var(--neon-red); color: black; padding: 10px;
+            font-weight: bold; border: 2px solid white; z-index: 50;
+            animation: shake 0.5s infinite; font-family: 'Courier New';
+            box-shadow: 5px 5px 0px black; pointer-events: none;
         }
-        .poll-btn:hover { border-color: var(--neon-blue); color: white; background: #111; }
-        .poll-key { font-weight: bold; color: var(--neon-blue); margin-right: 15px; }
 
-        /* Archive Mode */
+        .timer-bg { width: 100%; height: 10px; background: #222; margin: 20px 0; }
+        .timer-fill { width: 100%; height: 100%; background: var(--neon-red); transition: width 0.1s linear; }
+
+        /* --- TACTICAL MODE (LOGIC) --- */
+        .logic-row { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+        select {
+            width: 100%; padding: 10px; background: #000; color: var(--neon-blue);
+            border: 1px solid var(--neon-blue); font-family: 'VT323'; font-size: 1.4rem;
+        }
+        .logic-feedback { 
+            margin-top: 20px; padding: 20px; border: 1px dashed; font-size: 1.4rem; display: none; 
+        }
+
+        /* --- SIMULATION MODE --- */
+        .sim-card {
+            border: 1px solid #fff; padding: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05);
+        }
+        .sim-btn {
+            width: 100%; padding: 12px; margin-top: 10px; background: transparent; 
+            border: 1px solid #555; color: #ccc; cursor: pointer; text-align: left; font-family: 'Roboto Mono';
+        }
+        .sim-btn:hover { border-color: white; color: white; }
+        .progress-bar { color: #888; text-align: right; font-size: 1rem; margin-bottom: 10px; }
+
+        /* --- ARCHIVE MODE --- */
         .archive-box { border: 2px solid var(--neon-gold); padding: 40px; text-align: center; }
-        .input-gold { width: 100%; padding: 15px; background: #111; border: 1px solid var(--neon-gold); color: var(--neon-gold); font-family: 'VT323'; font-size: 1.5rem; text-align: center; margin-top: 20px; }
-        .btn-gold { background: var(--neon-gold); color: black; border: none; padding: 15px 40px; font-size: 1.5rem; font-weight: bold; margin-top: 15px; cursor: pointer; }
-
-        /* Audio Toggle */
-        #audio-toggle {
-            position: fixed; bottom: 20px; right: 20px; z-index: 100;
-            background: black; color: #666; border: 1px solid #666; padding: 10px 20px;
-            font-family: 'VT323'; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+        input[type="email"] {
+            width: 80%; padding: 15px; background: #111; border: 1px solid var(--neon-gold);
+            color: var(--neon-gold); font-family: 'VT323'; font-size: 1.5rem; text-align: center; margin-top: 20px;
         }
-        #audio-toggle.on { border-color: var(--neon-red); color: var(--neon-red); box-shadow: 0 0 10px var(--neon-red); }
+        .btn-gold {
+            background: var(--neon-gold); color: black; border: none; padding: 15px 40px;
+            font-size: 1.5rem; font-weight: bold; margin-top: 15px; cursor: pointer;
+        }
 
-        .feedback { margin-top: 15px; padding: 15px; font-size: 1.4rem; display: none; border: 1px dashed; }
-        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.8; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
 
     </style>
 </head>
@@ -160,245 +129,305 @@
 
     <div class="scanlines"></div>
 
-    <header>
-        <h1>STRESS TACTICS</h1>
-        
-        <div class="id-card">
-            <img src="kariera2025-205" alt="User" class="id-photo">
-            <div class="id-info">
-                <span class="id-role">HEAD OPERATOR</span>
-                <span class="id-name">DR. D. CHIONIS</span>
-            </div>
-        </div>
-    </header>
+    <div id="intro-screen">
+        <h1 style="font-size: 5rem; margin-bottom: 20px;">STRESS TACTICS</h1>
+        <p style="color: #888; font-family: 'Roboto Mono'; margin-bottom: 40px;">COGNITIVE ENGINEERING WORKSHOP</p>
+        <button class="start-btn" onclick="enterSystem()">ENTER SYSTEM</button>
+    </div>
 
-    <nav>
-        <button class="nav-btn active" data-target="reflex" onclick="setTab('reflex')">I. THREAT</button>
-        <button class="nav-btn" data-target="tactical" onclick="setTab('tactical')">II. LOGIC</button>
-        <button class="nav-btn" data-target="sim" onclick="setTab('sim')">III. SIMULATION</button>
-        <button class="nav-btn" data-target="archive" onclick="setTab('archive')">IV. ARCHIVE</button>
-    </nav>
-
-    <main>
-        <div id="reflex" class="screen active">
-            <h2 style="color:var(--neon-red)">// SYSTEM 1: REFLEX OVERLOAD</h2>
-            <p class="desc">STATUS: <span style="color:var(--neon-red)">CRITICAL THREAT DETECTED</span></p>
-            
-            <div style="background:#222; padding:20px; border-left:4px solid var(--neon-red); font-style:italic; font-size:1.4rem; font-family:'Roboto Mono'; color:white; margin-bottom:20px;">
-                INCOMING CHAT (ALL STAFF):<br>
-                "Επειδή ο Δημήτριος πάλι ξέχασε να στείλει τα αρχεία, θα χρειαστεί να δουλέψουμε όλοι το Σαββατοκύριακο."
-            </div>
-            
-            <div class="timer-bg"><div id="timerBar" class="timer-fill"></div></div>
-            
-            <textarea id="reflexInput" placeholder="> TYPE RESPONSE IMMEDIATELY..." onkeydown="playTypeSound()"></textarea>
-            <div id="reflexFb" class="feedback" style="color:var(--neon-red); border-color:var(--neon-red);">
-                > TIME EXPIRED. AMYGDALA HIJACK CONFIRMED.
-            </div>
-        </div>
-
-        <div id="tactical" class="screen">
-            <h2 style="color:var(--neon-blue)">// SYSTEM 2: COGNITIVE PROTOCOL</h2>
-            <p class="desc">STATUS: <span style="color:var(--neon-blue)">ENGAGING FILTERS...</span></p>
-            
-            <div class="checklist">
-                <div class="check-item"><input type="checkbox" onchange="checkTactical()"> 01. DETACH EMOTION (Not Personal)</div>
-                <div class="check-item"><input type="checkbox" onchange="checkTactical()"> 02. VERIFY FACTS (Check Sent Items)</div>
-                <div class="check-item"><input type="checkbox" onchange="checkTactical()"> 03. DEFINE OBJECTIVE (Solve, don't Fight)</div>
-            </div>
-
-            <textarea id="tacticalInput" disabled placeholder="> INPUT LOCKED. COMPLETE CHECKLIST FIRST."></textarea>
-            <div id="tacticalFb" class="feedback" style="color:var(--neon-blue); border-color:var(--neon-blue); display:none;">
-                > PROTOCOL VERIFIED. SIGNAL NOISE REDUCED.
-            </div>
-        </div>
-
-        <div id="sim" class="screen">
-            <h2 style="color:white">// SIMULATION: OMNIBANK CRISIS</h2>
-            <div class="terminal">
-                <div id="typeArea" class="type-area"></div>
-                
-                <div id="pollArea" class="poll-area">
-                    <div style="color:var(--neon-blue); font-size:1.3rem;">> AWAITING COMMAND (TYPE A, B OR C IN CHAT):</div>
-                    <button id="btnA" class="poll-btn" onclick="simChoice('A')"></button>
-                    <button id="btnB" class="poll-btn" onclick="simChoice('B')"></button>
-                    <button id="btnC" class="poll-btn" onclick="simChoice('C')"></button>
+    <div id="app-container" style="display:none; height: 100%; flex-direction: column;">
+        <header>
+            <h1>STRESS TACTICS</h1>
+            <div class="id-card">
+                <img src="https://ui-avatars.com/api/?name=Dr+Chionis&background=04d9ff&color=fff&size=128" class="id-photo">
+                <div class="id-info">
+                    <span style="font-size:0.8rem; color:var(--neon-blue); font-family:'Roboto Mono'">HEAD OPERATOR</span>
+                    <span style="font-size:1.2rem; font-weight:bold">DR. D. CHIONIS</span>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div id="archive" class="screen">
-            <div class="archive-box">
-                <h2 style="color:var(--neon-gold); border:none;">// CLASSIFIED TOOLKIT</h2>
-                <p class="desc">SECURE DOWNLOAD: CHEAT SHEET & SLIDES</p>
-                
-                <ul style="text-align:left; font-size:1.3rem; color:#aaa; width:60%; margin: 30px auto;">
-                    <li>[FILE] Protocol_Alpha.pdf (One-Page Guide)</li>
-                    <li>[FILE] Workshop_Deck.pptx</li>
-                    <li>[FILE] Power_Words_List.txt</li>
-                </ul>
+        <nav>
+            <button class="nav-btn active" data-target="reflex" onclick="setTab('reflex')">I. THREAT</button>
+            <button class="nav-btn" data-target="tactical" onclick="setTab('tactical')">II. LOGIC</button>
+            <button class="nav-btn" data-target="sim" onclick="setTab('sim')">III. SIMULATION</button>
+            <button class="nav-btn" data-target="archive" onclick="setTab('archive')">IV. ARCHIVE</button>
+        </nav>
 
-                <input type="email" id="emailInput" class="input-gold" placeholder="ENTER SECURE EMAIL">
-                <button onclick="submitLead()" class="btn-gold">UNLOCK ASSETS</button>
+        <main id="main-area">
+            
+            <div id="reflex" class="screen active">
+                <h2 style="color:var(--neon-red)">// SYSTEM 1: REFLEX OVERLOAD</h2>
+                <div style="background:#222; padding:15px; border-left:4px solid var(--neon-red); font-family:'Roboto Mono'; margin-bottom:10px;">
+                    INCOMING CHAT: "Επειδή ο Δημήτριος πάλι ξέχασε να στείλει τα αρχεία, θα χρειαστεί να δουλέψουμε όλοι το Σαββατοκύριακο."
+                </div>
                 
-                <div id="leadFb" class="feedback" style="color:var(--neon-gold); border-color:var(--neon-gold);">
-                    > ACCESS GRANTED. ASSETS SENT TO INBOX.
+                <div class="timer-bg"><div id="timerBar" class="timer-fill"></div></div>
+
+                <div class="option-grid" id="reflexOptions">
+                    <button class="reflex-btn" onclick="reflexReact('Attack')">1. "Τι λες ρε; Εσύ φταις!" (ATTACK)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Defend')">2. "Εγώ τα έστειλα, δεν ξέρω τι λες." (DEFEND)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Freeze')">3. ... (Δεν απαντάω, παγώνω) (FREEZE)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Irony')">4. "Συγχαρητήρια για την οργάνωση..." (PASSIVE AGGRESSIVE)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Panic')">5. "Συγγνώμη, συγγνώμη, έρχομαι τώρα!" (FAWN)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Quit')">6. "Παραιτούμαι, δεν αντέχω άλλο." (ESCAPE)</button>
+                    <button class="reflex-btn" onclick="reflexReact('Gossip')">7. Στέλνω DM σε άλλον: "Είδες τι έγραψε;" (VENT)</button>
+                </div>
+                <div id="reflexFb" style="margin-top:20px; color:var(--neon-red); display:none; font-size:1.5rem; text-align:center;">
+                    > SYSTEM OVERLOAD. DECISION COMPROMISED.
                 </div>
             </div>
-        </div>
-    </main>
 
-    <button id="audio-toggle" onclick="toggleAudio()">🔊 AUDIO: OFF</button>
+            <div id="tactical" class="screen">
+                <h2 style="color:var(--neon-blue)">// SYSTEM 2: COGNITIVE PROTOCOL</h2>
+                <p>ALIGN THE PROTOCOL TO UNLOCK RESPONSE:</p>
+                
+                <div class="logic-row">
+                    <label>STEP 1: EMOTIONAL STATE</label>
+                    <select id="step1">
+                        <option value="null">-- SELECT --</option>
+                        <option value="angry">ANGER (Fight Back)</option>
+                        <option value="scared">FEAR (Hide)</option>
+                        <option value="detached">DETACHED (Observer)</option>
+                    </select>
+                </div>
+                <div class="logic-row">
+                    <label>STEP 2: FACT CHECKING</label>
+                    <select id="step2">
+                        <option value="null">-- SELECT --</option>
+                        <option value="guess">ASSUMPTION (I think I sent them)</option>
+                        <option value="ignore">IRRELEVANT (Doesn't matter)</option>
+                        <option value="verify">VERIFIED (Checked Sent Items)</option>
+                    </select>
+                </div>
+                <div class="logic-row">
+                    <label>STEP 3: OBJECTIVE</label>
+                    <select id="step3">
+                        <option value="null">-- SELECT --</option>
+                        <option value="win">WIN THE ARGUMENT</option>
+                        <option value="peace">KEEP THE PEACE (Submit)</option>
+                        <option value="solve">SOLVE THE PROBLEM</option>
+                    </select>
+                </div>
+
+                <button class="btn-gold" style="background:var(--neon-blue); width:100%; border:none; margin-top:20px;" onclick="checkLogic()">EXECUTE PROTOCOL</button>
+                
+                <div id="logicFb" class="logic-feedback"></div>
+            </div>
+
+            <div id="sim" class="screen">
+                <h2 style="color:white">// SIMULATION: ESCALATION (10 LEVELS)</h2>
+                <div class="progress-bar" id="simProgress">LEVEL 1 / 10</div>
+                
+                <div id="simCard" class="sim-card">
+                    <div id="simText" style="font-size:1.3rem; margin-bottom:20px;">SCENARIO TEXT LOADING...</div>
+                    <button class="sim-btn" onclick="nextSim(0)">OPTION A</button>
+                    <button class="sim-btn" onclick="nextSim(1)">OPTION B</button>
+                    <button class="sim-btn" onclick="nextSim(2)">OPTION C</button>
+                </div>
+                <div id="simEnd" style="display:none; text-align:center; color:var(--neon-gold); font-size:1.5rem;">
+                    SIMULATION COMPLETE.<br>STRESS TOLERANCE ANALYSIS: FINISHED.
+                </div>
+            </div>
+
+            <div id="archive" class="screen">
+                <div class="archive-box">
+                    <h2 style="color:var(--neon-gold); border:none;">// ARCHIVE ACCESS</h2>
+                    <p>ENTER EMAIL TO RECEIVE:</p>
+                    <ul style="text-align:left; color:#aaa; margin: 20px auto; width: fit-content;">
+                        <li>[PDF] Complete Workshop Presentation</li>
+                        <li>[LINK] LinkedIn Profile (Dr. Chionis)</li>
+                        <li>[LINK] GitHub Repository</li>
+                    </ul>
+                    
+                    <form id="leadForm" onsubmit="submitLead(event)">
+                        <input type="email" id="userEmail" name="email" required placeholder="ENTER YOUR EMAIL">
+                        <button type="submit" class="btn-gold">INITIATE TRANSFER</button>
+                    </form>
+                    
+                    <div id="leadFb" style="margin-top:20px; color:var(--neon-gold); display:none;">
+                        > DATA SENT. CHECK YOUR INBOX.<br>> REDIRECTING TO LINKEDIN...
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
 
 <script>
-    // --- AUDIO ENGINE ---
-    let audioCtx;
-    let isAudioOn = false;
+    // --- GLOBAL STATE ---
+    let overloadTriggered = false;
+    let reflexTimer;
+    let simIndex = 0;
 
-    function initAudio() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+    // --- INTRO ---
+    function enterSystem() {
+        document.getElementById('intro-screen').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        // Optional: Start Intro Sound here
     }
 
-    function playTone(freq, type, dur) {
-        if (!isAudioOn) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + dur);
-    }
-
-    function toggleAudio() {
-        initAudio();
-        isAudioOn = !isAudioOn;
-        const btn = document.getElementById('audio-toggle');
-        btn.innerText = isAudioOn ? "🔊 AUDIO: ON" : "🔊 AUDIO: OFF";
-        btn.classList.toggle('on');
-        if (isAudioOn) playTone(110, 'sawtooth', 0.5); // Start sound
-    }
-
-    function playTypeSound() { if (Math.random() > 0.7) playTone(800, 'square', 0.05); }
-
-    // --- NAVIGATION ---
+    // --- NAV ---
     function setTab(id) {
         document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         document.querySelector(`.nav-btn[data-target="${id}"]`).classList.add('active');
 
-        // Sounds & Init Logic
-        if(id === 'reflex') { playTone(100, 'sawtooth', 0.5); startReflex(); }
-        if(id === 'tactical') playTone(440, 'sine', 0.5);
-        if(id === 'sim') { playTone(220, 'square', 0.5); if(!simStarted) startSim('start'); }
-        if(id === 'archive') playTone(880, 'sine', 0.4);
+        if(id === 'reflex') startReflex();
     }
 
-    // --- REFLEX LOGIC ---
-    let reflexInterval;
+    // --- REFLEX LOGIC (OVERLOAD) ---
     function startReflex() {
-        clearInterval(reflexInterval);
+        clearInterval(reflexTimer);
         const bar = document.getElementById('timerBar');
-        const input = document.getElementById('reflexInput');
         const fb = document.getElementById('reflexFb');
+        document.getElementById('reflexOptions').style.opacity = '1';
+        document.querySelectorAll('.popup-msg').forEach(e => e.remove()); // Clear old popups
         
-        input.value = ""; input.disabled = false; fb.style.display = 'none';
+        fb.style.display = 'none';
         let width = 100;
+        overloadTriggered = false;
 
-        reflexInterval = setInterval(() => {
-            width -= 0.5; // Speed
+        reflexTimer = setInterval(() => {
+            width -= 0.5;
             bar.style.width = width + '%';
+
+            // TRIGGER OVERLOAD AT 50%
+            if (width < 50 && !overloadTriggered) {
+                overloadTriggered = true;
+                triggerOverload();
+            }
+
             if (width <= 0) {
-                clearInterval(reflexInterval);
-                input.disabled = true;
+                clearInterval(reflexTimer);
                 fb.style.display = 'block';
-                playTone(60, 'sawtooth', 1.0); // Fail sound
             }
-        }, 50);
+        }, 50); // Speed of timer
     }
 
-    // --- TACTICAL LOGIC ---
-    function checkTactical() {
-        playTone(600, 'sine', 0.1); // Click sound
-        const all = Array.from(document.querySelectorAll('.checklist input')).every(i => i.checked);
-        if (all) {
-            const input = document.getElementById('tacticalInput');
-            input.disabled = false;
-            input.placeholder = "> SYSTEM UNLOCKED. ENTER LOGICAL RESPONSE.";
-            playTone(1000, 'sine', 0.5); // Success sound
-        }
-    }
-
-    // --- SIMULATION LOGIC ---
-    const story = {
-        start: {
-            text: "ΔΕΥΤΕΡΑ 08:57 | HQ\n\nΤο τηλέφωνο χτυπάει. Είναι ο CTO της OmniBank.\n\n\"Δρ. Χιώνη, το update κράσαρε το trading platform. Το Χρηματιστήριο ανοίγει σε 3 λεπτά. Αν δεν παίξει, χάνουμε εκατομμύρια και τη σύμβαση.\"\n\nΗ ομάδα IT σε κοιτάζει παγωμένη.",
-            choices: [
-                {k:'A', t:'FIGHT: Ρίξε την ευθύνη στο Hardware', n:'blame'},
-                {k:'B', t:'FREEZE: Ζήτα 30 λεπτά για διάγνωση', n:'delay'},
-                {k:'C', t:'FLOW: Εντολή για Rollback ΤΩΡΑ', n:'rollback'}
-            ]
-        },
-        blame: { text: "ΕΠΙΛΟΓΗ A: FIGHT\n\nΚατηγορείς το hardware τους. Ο CTO ουρλιάζει: \"Τολμάς να κατηγορείς εμάς; Καλώ τους δικηγόρους!\"\n\nΤο Χρηματιστήριο ανοίγει. Η πλατφόρμα είναι κάτω.\n\n> GAME OVER: Απώλεια Πελάτη.", choices: [] },
-        delay: { text: "ΕΠΙΛΟΓΗ B: FREEZE\n\nΖητάς χρόνο. \"Δεν έχουμε χρόνο!\" φωνάζει και κλείνει.\nΗ ομάδα μένει χωρίς εντολές. Τα 3 λεπτά περνούν.\n\n> GAME OVER: Παράλυση Λήψης Αποφάσεων.", choices: [] },
-        rollback: { text: "ΕΠΙΛΟΓΗ C: FLOW\n\nΑγνοείς τον τόνο του. Δίνεις εντολή: \"Rollback στο v4.5 ΤΩΡΑ.\"\n\n08:59. Το σύστημα επανέρχεται.\n09:00. Το trading ξεκινά ομαλά.\n\n> MISSION SUCCESS: Ψυχραιμία υπό πίεση.", choices: [] }
-    };
-
-    let simStarted = false;
-    let currentData = {};
-
-    function startSim(key) {
-        simStarted = true;
-        currentData = story[key];
-        const area = document.getElementById('typeArea');
-        document.getElementById('pollArea').style.display = 'none';
+    function triggerOverload() {
+        const msgs = ["NEW EMAIL FROM BOSS", "HR NOTIFICATION", "MISSED CALL", "CLIENT ANGRY", "SYSTEM ERROR", "DEADLINE MISSED"];
+        const container = document.getElementById('reflex');
         
-        // Typewriter Effect
-        let i = 0;
-        area.innerHTML = "<span class='cursor'></span>";
+        let count = 0;
+        const interval = setInterval(() => {
+            if(count > 15) clearInterval(interval);
+            const div = document.createElement('div');
+            div.className = 'popup-msg';
+            div.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+            div.style.top = (20 + Math.random() * 60) + '%';
+            div.style.left = (10 + Math.random() * 70) + '%';
+            container.appendChild(div);
+            count++;
+        }, 200);
+    }
+
+    function reflexReact(type) {
+        clearInterval(reflexTimer);
+        alert("RESPONSE LOGGED: " + type + "\n(Notice how the pressure affected your choice?)");
+    }
+
+    // --- TACTICAL LOGIC (BRANCHED) ---
+    function checkLogic() {
+        const s1 = document.getElementById('step1').value;
+        const s2 = document.getElementById('step2').value;
+        const s3 = document.getElementById('step3').value;
+        const fb = document.getElementById('logicFb');
+
+        fb.style.display = 'block';
         
-        function type() {
-            if (i < currentData.text.length) {
-                area.innerHTML = currentData.text.substring(0, i+1) + "<span class='cursor'></span>";
-                i++;
-                setTimeout(type, 30);
-            } else {
-                if(currentData.choices.length > 0) showPolls();
-            }
-        }
-        type();
-    }
-
-    function showPolls() {
-        playTone(400, 'square', 0.4); // Alert sound
-        const area = document.getElementById('pollArea');
-        area.style.display = 'flex';
-        document.getElementById('btnA').innerHTML = `<span class='poll-key'>A</span> ${currentData.choices[0].t}`;
-        document.getElementById('btnB').innerHTML = `<span class='poll-key'>B</span> ${currentData.choices[1].t}`;
-        document.getElementById('btnC').innerHTML = `<span class='poll-key'>C</span> ${currentData.choices[2].t}`;
-    }
-
-    function simChoice(k) {
-        const next = currentData.choices.find(c => c.k === k).n;
-        startSim(next);
-    }
-
-    // --- ARCHIVE LOGIC ---
-    function submitLead() {
-        const email = document.getElementById('emailInput').value;
-        if(email.includes('@')) {
-            document.getElementById('leadFb').style.display = 'block';
-            document.getElementById('emailInput').style.display = 'none';
-            playTone(1200, 'sine', 0.5); // Win sound
+        // LOGIC TREE
+        if (s1 === 'detached' && s2 === 'verify' && s3 === 'solve') {
+            fb.style.color = 'var(--neon-blue)';
+            fb.style.borderColor = 'var(--neon-blue)';
+            fb.innerHTML = "> ACCESS GRANTED.<br>Protocol Correct. You separated emotion, checked facts, and aimed for a solution.";
+        } else if (s1 === 'angry') {
+            fb.style.color = 'var(--neon-red)';
+            fb.style.borderColor = 'var(--neon-red)';
+            fb.innerHTML = "> FAILURE: EMOTIONAL INTERFERENCE.<br>Fighting back while angry escalates the conflict.";
+        } else if (s2 === 'guess' || s2 === 'ignore') {
+            fb.style.color = 'var(--neon-gold)';
+            fb.style.borderColor = 'var(--neon-gold)';
+            fb.innerHTML = "> WARNING: DATA INSUFFICIENT.<br>Acting without verifying facts leads to errors.";
+        } else if (s3 === 'win') {
+            fb.style.color = 'var(--neon-red)';
+            fb.style.borderColor = 'var(--neon-red)';
+            fb.innerHTML = "> FAILURE: WRONG OBJECTIVE.<br>Trying to 'win' creates an enemy, not a solution.";
         } else {
-            alert("ERROR: INVALID EMAIL");
+            fb.style.color = '#fff';
+            fb.style.borderColor = '#fff';
+            fb.innerHTML = "> ERROR: MISALIGNED PROTOCOL.<br>Try again.";
         }
     }
-</script>
 
+    // --- SIMULATION LOGIC (10 SCENARIOS) ---
+    const scenarios = [
+        { t: "LVL 1: Typo in Email sent to team.", ops: ["Panic", "Ignore", "Correction Email"] },
+        { t: "LVL 2: Passive aggressive comment from coworker.", ops: ["Argue", "Vent to others", "Clarify intent"] },
+        { t: "LVL 3: Client changes deadline to Tomorrow.", ops: ["Refuse", "Overwork", "Negotiate scope"] },
+        { t: "LVL 4: Internet goes down during call.", ops: ["Scream", "Freeze", "Hotspot & Rejoin"] },
+        { t: "LVL 5: Public feedback in meeting (Negative).", ops: ["Defend", "Shut down", "Ask for details"] },
+        { t: "LVL 6: Rumor spreading about layoffs.", ops: ["Spread it", "Panic apply", "Verify source"] },
+        { t: "LVL 7: Salary delayed by 3 days.", ops: ["Threaten HR", "borrow money", "Ask formally"] },
+        { t: "LVL 8: Major data loss (Unsaved work).", ops: ["Break keyboard", "Cry", "IT recovery"] },
+        { t: "LVL 9: Hacking attempt on account.", ops: ["Ignore", "Click link", "Report Security"] },
+        { t: "LVL 10: TOTAL BURNOUT.", ops: ["Quit now", "Fake sick", "Seek help"] }
+    ];
+
+    function loadSim() {
+        if(simIndex >= scenarios.length) {
+            document.getElementById('simCard').style.display = 'none';
+            document.getElementById('simEnd').style.display = 'block';
+            return;
+        }
+        document.getElementById('simProgress').innerText = `LEVEL ${simIndex + 1} / 10`;
+        document.getElementById('simText').innerText = scenarios[simIndex].t;
+        const btns = document.querySelectorAll('.sim-btn');
+        btns[0].innerText = "A: " + scenarios[simIndex].ops[0];
+        btns[1].innerText = "B: " + scenarios[simIndex].ops[1];
+        btns[2].innerText = "C: " + scenarios[simIndex].ops[2];
+    }
+    
+    function nextSim(choice) {
+        simIndex++;
+        loadSim();
+    }
+    loadSim(); // Init
+
+    // --- ARCHIVE / LEAD GEN (GOOGLE SHEETS) ---
+    
+    // ΣΗΜΑΝΤΙΚΟ: ΑΝΤΙΚΑΤΑΣΤΗΣΕ ΑΥΤΟ ΤΟ URL ME TO URL TOY SCRIPT ΣΟΥ
+    const GOOGLE_SCRIPT_URL = 'ΒΑΛΕ_ΤΟ_URL_ΤΟΥ_GOOGLE_SCRIPT_ΕΔΩ'; 
+
+    function submitLead(e) {
+        e.preventDefault();
+        const email = document.getElementById('userEmail').value;
+        const btn = document.querySelector('.btn-gold');
+        const fb = document.getElementById('leadFb');
+
+        btn.innerText = "SENDING...";
+        btn.disabled = true;
+
+        // Send to Google Sheets
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Important for Google Script
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        }).then(() => {
+            fb.style.display = 'block';
+            btn.innerText = "DONE";
+            // Optional: Redirect to LinkedIn after 3 seconds
+            setTimeout(() => {
+                window.open('https://www.linkedin.com/in/YOUR_PROFILE', '_blank');
+            }, 3000);
+        }).catch(err => {
+            alert("Error sending data. Check internet.");
+            btn.disabled = false;
+        });
+    }
+
+</script>
 </body>
 </html>
